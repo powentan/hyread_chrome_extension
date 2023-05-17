@@ -1,6 +1,6 @@
 import { Book, Annotation } from '../model/book';
 
-type NoteInfo = {
+type AnnotationDetail = {
     text: string;
     notes?: string | null;
 }
@@ -9,20 +9,21 @@ type NoteInfo = {
 class AnnotationFormatter
 {
     book: Book;
-    notes: Array<Annotation>;
+    annotations: Array<Annotation>;
 
-    constructor(book: Book, notes: Array<Annotation>) {
+    constructor(book: Book, annotations: Array<Annotation>) {
         this.book = book;
-        this.notes = notes;
+        this.annotations = annotations;
     }
 
     _mergeAnnotationByChapter() {
-        let mergedNotes: {[key: string]: Array<NoteInfo>} | {} = {};
-        for(let note of this.notes) {
-            let title = note.chapterTitle;
+        // let mergedNotes: {[key: string]: Array<AnnotationDetail>} | {} = {};
+        let mergedNotes: Record<string, Array<AnnotationDetail>> = {};
+        for(let annotation of this.annotations) {
+            let title = annotation.chapterTitle;
             let noteInfo = {
-                text: note.text,
-                notes: note.notes,
+                text: annotation.text,
+                notes: annotation.notes,
             };
             if(title in mergedNotes) {
                 mergedNotes[title].push(noteInfo);

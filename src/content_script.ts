@@ -4,7 +4,7 @@ import { Cash } from "cash-dom";
 import superagent from 'superagent';
 import { Book } from './domain/model/book';
 import { HyReadServiceAdapter } from './infra/adapter/hyread_service';
-import { downloadStringAsFile } from './infra/adapter/export_format';
+import { ExportFormatAdapter } from './infra/adapter/export_format';
 import { BookService } from './domain/service/book';
 import { AnnotationFormatter } from './domain/service/formatter';
 
@@ -52,16 +52,25 @@ function init() {
         let $inforList = $toolbarblock.parent();
         const book = parseBookInfo($toolbarblock, $inforList)
 
-        const hyreadServiceAdapter = new HyReadServiceAdapter(idNo ?? '', superagent);
+        // XXX: fix typing issue
+        let _idNo = '';
+        if(typeof idNo === 'string') {
+            _idNo = idNo;
+        } else {
+            _idNo = idNo[0];
+        }
+
+        const hyreadServiceAdapter = new HyReadServiceAdapter(_idNo ?? '', superagent);
         const bookService = new BookService(book, hyreadServiceAdapter);
-        const notes = await bookService.getNotes();
+        const annotations = await bookService.getAnnotations();
 
         // output to the format
-        let formatter = new AnnotationFormatter(book, notes);
+        let formatter = new AnnotationFormatter(book, annotations);
         let markdown = formatter.toMarkdown();
         console.log('== mardown ==');
         console.log(markdown);
-        downloadStringAsFile(markdown, 'text/plain', `${book.title}.md`);
+        const exportFormatAdapter = new ExportFormatAdapter('text/plain');
+        exportFormatAdapter.downloadToFile(markdown, `${book.title}.md`);
 
         $(e.target).removeClass('disabled');
     });
