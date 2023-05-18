@@ -3,11 +3,24 @@
 ## 介紹短片
 - https://www.youtube.com/watch?v=sHfjKT57T1I
 
+## How to Build the Extension
+```shell
+# install packages
+make setup
+# build the content-script bundle
+make build
+# package the chrome extension
+make package
+```
 
 ## TODO
-- [ ] Rewrite this to typescript
+- [X] Rewrite this to typescript
 - [ ] Add exporting function for online viewing
-- [ ] Integrate with Zapier
-  - [ ] Save to google drive
-  - [ ] Save to ...
+- [ ] Customize exporting format
+- [ ] Integrate with other services
+  - [ ] Zapier
+    - [ ] Save to google drive
+    - [ ] Save to ...
+  - [ ] Notion
+  - [ ] ...
 - [ ] Sync all books at once
