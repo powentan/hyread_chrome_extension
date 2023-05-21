@@ -17,7 +17,6 @@ class AnnotationFormatter
     }
 
     _mergeAnnotationByChapter() {
-        // let mergedNotes: {[key: string]: Array<AnnotationDetail>} | {} = {};
         let mergedNotes: Record<string, Array<AnnotationDetail>> = {};
         for(let annotation of this.annotations) {
             let title = annotation.chapterTitle;

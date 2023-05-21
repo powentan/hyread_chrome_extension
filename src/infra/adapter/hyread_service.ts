@@ -1,7 +1,7 @@
 import { HyReadServicePort } from '../../domain/repo/hyread_service';
 import { AnnotationResultItem } from '../../domain/model/book';
 
-export class HyReadServiceAdapter implements HyReadServicePort {
+export default class HyReadServiceAdapter implements HyReadServicePort {
     appId = '8a8a84c87216ed3301737517e6770000';
     apiKey = '8a8a84c87216ed3301737517e6770000';
     apiPath = 'https://service.ebook.hyread.com.tw/DataService/1/classes';

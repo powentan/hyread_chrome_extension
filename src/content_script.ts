@@ -3,7 +3,7 @@ import $ from "cash-dom";
 import { Cash } from "cash-dom";
 import superagent from 'superagent';
 import { Book } from './domain/model/book';
-import { HyReadServiceAdapter } from './infra/adapter/hyread_service';
+import HyReadServiceAdapter from './infra/adapter/hyread_service';
 import { ExportFormatAdapter } from './infra/adapter/export_format';
 import { BookService } from './domain/service/book';
 import { AnnotationFormatter } from './domain/service/formatter';

@@ -1,12 +1,26 @@
 {
+  "imports": {
+    "./src/*.ts": "./*.ts"
+  },
+  "scripts": {
+    "setup": "npm install .",
+    "build": "npx webpack",
+    "package": "rm -rf package package.zip; mkdir package; cp -rf background.js dist manifest.json package/.; zip -r hyread_annotate_exporter.zip package;",
+    "test": "jest --coverage"
+  },
   "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "@types/node": "^20.2.1",
     "@types/superagent": "^4.1.17",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",
     "webpack": "^5.82.0",
     "webpack-cli": "^5.1.0"
   },
   "dependencies": {
+    "@jest/globals": "^29.5.0",
     "cash-dom": "^8.1.5",
     "superagent": "^8.0.9"
   }
