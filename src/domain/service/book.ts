@@ -11,7 +11,7 @@ export class BookService {
     }
 
     _parseAnnotationResult(results: Array<AnnotationResultItem>): Array<Annotation> {
-        let notes = [];
+        let annotations = [];
         for(const item of results) {
             let data = JSON.parse(item.data);
             console.log(data);
@@ -23,17 +23,17 @@ export class BookService {
                 };
             });
             console.log(_notes);
-            notes.push(..._notes);
+            annotations.push(..._notes);
         }
 
-        return notes;
+        return annotations;
     }
 
     async getAnnotations(): Promise<Array<Annotation>> {
         let results = await this.hyreadService.getAnnotation(this.book.assetUUID);
         console.log(results);
-        let notes = this._parseAnnotationResult(results);
-        console.log(notes);
-        return notes;
+        let annotations = this._parseAnnotationResult(results);
+        console.log(annotations);
+        return annotations;
     }
 }

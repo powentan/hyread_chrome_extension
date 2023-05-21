@@ -15,6 +15,7 @@ make package
 
 ## TODO
 - [X] Rewrite this to typescript
+- [X] Add unit testing
 - [ ] Add exporting function for online viewing
 - [ ] Customize exporting format
 - [ ] Integrate with other services
