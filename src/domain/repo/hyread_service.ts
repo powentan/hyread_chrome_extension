@@ -1,5 +1,6 @@
 import { AnnotationResultItem } from '../model/book';
+import { Book } from '../model/book';
 
 export interface HyReadServicePort {
-    getAnnotation(assetUUID: string | null): Promise<Array<AnnotationResultItem>>;
+    getAnnotation(book: Book): Promise<Array<AnnotationResultItem>>;
 }

@@ -1,5 +1,5 @@
 import { HyReadServicePort } from '../../domain/repo/hyread_service';
-import { AnnotationResultItem } from '../../domain/model/book';
+import { Book, isHistoricalBook, AnnotationResultItem } from '../../domain/model/book';
 
 export default class HyReadServiceAdapter implements HyReadServicePort {
     appId = '8a8a84c87216ed3301737517e6770000';
@@ -13,16 +13,26 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
         this.superagent = superagent;
     }
 
-    async getAnnotation(assetUUID: string): Promise<Array<AnnotationResultItem>> {
-        let _idNo = this.idNo.toLowerCase();
-        const query = {
+    async getAnnotation(book: Book): Promise<Array<AnnotationResultItem>> {
+        let commonQuery = {
             domainId: {
-                '$regex': `${_idNo.toLowerCase()}$`
+                '$regex': `${this.idNo.toLowerCase()}$`
             },
             syncTime: {
                 '$gt': 0
             },
-            assetUUID: assetUUID
+        }
+        let query = {};
+        if(isHistoricalBook(book)) {
+            query = {
+                ...commonQuery,
+                brn: book.brn,
+            };
+        } else {
+            query = {
+                ...commonQuery,
+                assetUUID: book.assetUUID,
+            };
         }
 
         let res = await this.superagent
