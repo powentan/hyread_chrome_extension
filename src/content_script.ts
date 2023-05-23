@@ -10,10 +10,18 @@ import { AnnotationFormatter } from './domain/service/formatter';
 
 function parseOnlineReadingUrl(url: string): Book {
     let search = new URL(url, window.location.origin).searchParams;
-    return {
-        assetUUID: search.get('asstuuid'),
-        eid: search.get('eid'),
-        ownerCode: search.get('owner_code')
+    const brn = search.get('brn');
+
+    if(brn) {
+        return {
+            brn: brn,
+        }
+    } else {
+        return {
+            assetUUID: search.get('asstuuid'),
+            eid: search.get('eid'),
+            ownerCode: search.get('owner_code'),
+        }
     }
 }
 

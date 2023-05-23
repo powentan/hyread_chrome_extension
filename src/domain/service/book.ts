@@ -30,7 +30,8 @@ export class BookService {
     }
 
     async getAnnotations(): Promise<Array<Annotation>> {
-        let results = await this.hyreadService.getAnnotation(this.book.assetUUID);
+        let results = [];
+        results = await this.hyreadService.getAnnotation(this.book);
         console.log(results);
         let annotations = this._parseAnnotationResult(results);
         console.log(annotations);
