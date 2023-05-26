@@ -1,12 +1,8 @@
 import { exportAnnotationButton } from './app/ui';
 import $ from "cash-dom";
 import { Cash } from "cash-dom";
-import superagent from 'superagent';
 import { Book } from './domain/model/book';
-import HyReadServiceAdapter from './infra/adapter/hyread_service';
-import { ExportFormatAdapter } from './infra/adapter/export_format';
-import { BookService } from './domain/service/book';
-import { AnnotationFormatter } from './domain/service/formatter';
+import { downloadFile } from './app/page';
 
 function parseOnlineReadingUrl(url: string): Book {
     let search = new URL(url, window.location.origin).searchParams;
@@ -49,6 +45,7 @@ function init() {
     console.log('init content script')
     const idNo = $('[name="readerCode"]').val();
 
+    // inject for bookcase and historical
     const $exportButton = $(exportAnnotationButton);
     $('.infor-list .toolbarblock .toolbar:last-child').after($exportButton);
     $('.infor-list .toolbarblock .toolbar:last-child').on('click', async e => {
@@ -68,20 +65,42 @@ function init() {
             _idNo = idNo[0];
         }
 
-        const hyreadServiceAdapter = new HyReadServiceAdapter(_idNo ?? '', superagent);
-        const bookService = new BookService(book, hyreadServiceAdapter);
-        const annotations = await bookService.getAnnotations();
-
-        // output to the format
-        let formatter = new AnnotationFormatter(book, annotations);
-        let markdown = formatter.toMarkdown();
-        console.log('== mardown ==');
-        console.log(markdown);
-        const exportFormatAdapter = new ExportFormatAdapter('text/plain');
-        exportFormatAdapter.downloadToFile(markdown, `${book.title}.md`);
+        await downloadFile(_idNo, book);
 
         $(e.target).removeClass('disabled');
     });
+    // inject for online reader
+    if(window.location.pathname.indexOf('/openbook2.jsp') !== -1) {
+        const intervalId = setInterval(() => {
+            // clone an existing element for exporting
+            const $export = $('[aria-label="搜尋"]').clone().addClass('export').on('click', async e => {
+                let $menu = $('[aria-label="目次"]');
+                let search = new URL(window.location.href).searchParams;
+                const assetUUID = search.get('asset_id');
+                const idNo = search.get('userId') || '';
+                // show menu
+                $menu.trigger('click');
+                const $infoTab = $('[class^="TabBar__TabBarItem"]:last-child');
+                $infoTab.trigger('click');
+                const cover = $("[class^='InformationPanel__InformationCover']").attr('src');
+                const title = $("[class^='InformationPanel__InformationTitle']").text();
+                // hide menu
+                $menu.trigger('click');
+
+                const book: Book = {
+                    assetUUID,
+                    cover,
+                    title,
+                };
+
+                await downloadFile(idNo, book);
+            });
+            if($export.length !== 0) {
+                clearInterval(intervalId);
+                $('[aria-label="搜尋"]').after($export);
+            }
+        }, 1000);
+    }
 }
 
 $(document).ready(function() {

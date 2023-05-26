@@ -1,11 +1,16 @@
 import { HyReadServicePort } from '../repo/hyread_service';
+import { ExportFormatPort } from 'domain/repo/export_format';
 import { Book, Annotation, AnnotationResultItem } from '../model/book';
+import { AnnotationFormatPort } from 'domain/repo/annotation_format';
 
 export class BookService {
     book: Book;
     hyreadService: HyReadServicePort;
 
-    constructor(book: Book, hyreadService: HyReadServicePort) {
+    constructor(
+        book: Book,
+        hyreadService: HyReadServicePort,
+    ) {
         this.book = book;
         this.hyreadService = hyreadService;
     }

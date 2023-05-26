@@ -1,4 +1,5 @@
-import { Book, Annotation } from '../model/book';
+import { Book, Annotation } from '../../domain/model/book';
+import { AnnotationFormatPort } from 'domain/repo/annotation_format';
 
 type AnnotationDetail = {
     text: string;
@@ -6,7 +7,7 @@ type AnnotationDetail = {
 }
 
 
-class AnnotationFormatter
+export default class AnnotationFormatAdapter implements AnnotationFormatPort
 {
     book: Book;
     annotations: Array<Annotation>;
@@ -16,9 +17,10 @@ class AnnotationFormatter
         this.annotations = annotations;
     }
 
-    _mergeAnnotationByChapter() {
+    _mergeAnnotationByChapter(annotations: Array<Annotation>): Record<string, Array<AnnotationDetail>> {
         let mergedNotes: Record<string, Array<AnnotationDetail>> = {};
-        for(let annotation of this.annotations) {
+        // for(let annotation of this.annotations) {
+        for(let annotation of annotations) {
             let title = annotation.chapterTitle;
             let noteInfo = {
                 text: annotation.text,
@@ -34,8 +36,10 @@ class AnnotationFormatter
         return mergedNotes;
     }
 
-    toMarkdown() {
-        let mergedNotes = this._mergeAnnotationByChapter();
+    // toMarkdown(annotations: Array<Annotation>): string {
+    toMarkdown(): string {
+        // let mergedNotes = this._mergeAnnotationByChapter(annotations);
+        let mergedNotes = this._mergeAnnotationByChapter(this.annotations);
 
         let markdown = `# ${this.book.title}\n![${this.book.title}](${this.book.cover})\n`;
         for(let chapter in mergedNotes) {
@@ -55,5 +59,3 @@ class AnnotationFormatter
         return markdown;
     }
 }
-
-export { AnnotationFormatter };
