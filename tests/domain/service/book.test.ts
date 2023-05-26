@@ -31,9 +31,12 @@ describe('test hyread book service', () => {
         };
         const idNo = 'A123456789';
         const hyReadServiceAdapter = new HyReadServiceAdapter(idNo, jest.fn());
-        const bookService = new BookService(book, hyReadServiceAdapter);
+        const bookService = new BookService(
+            book,
+            hyReadServiceAdapter,
+        );
 
-        const annotations: Array<Annotation> = await bookService.getAnnotations(); 
+        const annotations: Array<Annotation> = await bookService.getAnnotations();
 
         expect(annotations).toHaveLength(4);
 

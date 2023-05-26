@@ -1,6 +1,6 @@
 import { ExportFormatPort } from '../../domain/repo/export_format';
 
-export class ExportFormatAdapter implements ExportFormatPort {
+export default class ExportFormatAdapter implements ExportFormatPort {
     fileType: string;
 
     constructor(fileType: string = 'text/plain') {

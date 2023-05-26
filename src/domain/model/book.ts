@@ -1,7 +1,7 @@
 type BookcaseBook = {
     assetUUID: string | null;
-    eid: string | null;
-    ownerCode: string | null;
+    eid?: string | null;
+    ownerCode?: string | null;
     title?: string | null;
     cover?: string | null;
 };

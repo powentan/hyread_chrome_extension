@@ -11,6 +11,10 @@ module.exports = {
     filename: "content-script-bundle.js" // <--- Will be compiled to this single file
   },
   resolve: {
+    modules: [
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, 'src/'),
+    ],
     extensions: [".ts", ".tsx", ".js"],
   },
   module: {

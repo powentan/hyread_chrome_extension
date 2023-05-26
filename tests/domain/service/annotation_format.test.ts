@@ -1,6 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { Book } from 'domain/model/book';
-import { AnnotationFormatter } from 'domain/service/formatter';
+import AnnotationFormatAdapter from 'infra/adapter/annotation_format';
+import { AnnotationService } from 'domain/service/annotation';
 
 
 describe('test formatter service', () => {
@@ -34,8 +35,12 @@ describe('test formatter service', () => {
                 notes: 'notes text',
             },
         ];
-        const formatter = new AnnotationFormatter(book, annotations);
-        const markdown = formatter.toMarkdown();
+        const annotationService = new AnnotationService(
+            book,
+            annotations,
+            new AnnotationFormatAdapter(book, annotations),
+        )
+        const markdown = annotationService.toFormat('markdown');
 
         expect(markdown).toContain(`# ${book.title}`)
         expect(markdown).toContain(`[${book.title}](${book.cover})`)
