@@ -1,4 +1,4 @@
-import { exportAnnotationButton } from './app/ui';
+import { exportAnnotationButton, fileExportIcon } from './app/ui';
 import $ from "cash-dom";
 import { Cash } from "cash-dom";
 import { Book } from './domain/model/book';
@@ -71,34 +71,45 @@ function init() {
     });
     // inject for online reader
     if(window.location.pathname.indexOf('/openbook2.jsp') !== -1) {
+        let timeout = 0;
         const intervalId = setInterval(() => {
             // clone an existing element for exporting
-            const $export = $('[aria-label="搜尋"]').clone().addClass('export').on('click', async e => {
-                let $menu = $('[aria-label="目次"]');
-                let search = new URL(window.location.href).searchParams;
-                const assetUUID = search.get('asset_id');
-                const idNo = search.get('userId') || '';
-                // show menu
-                $menu.trigger('click');
-                const $infoTab = $('[class^="TabBar__TabBarItem"]:last-child');
-                $infoTab.trigger('click');
-                const cover = $("[class^='InformationPanel__InformationCover']").attr('src');
-                const title = $("[class^='InformationPanel__InformationTitle']").text();
-                // hide menu
-                $menu.trigger('click');
+            const $export = $('[aria-label="搜尋"]')
+                .clone().addClass('export').attr('aria-label', '匯出')
+                .html(fileExportIcon)
+                .on('click', async e => {
+                    $(e.currentTarget).css('display', 'none');
 
-                const book: Book = {
-                    assetUUID,
-                    cover,
-                    title,
-                };
+                    let $menu = $('[aria-label="目次"]');
+                    let search = new URL(window.location.href).searchParams;
+                    const assetUUID = search.get('asset_id');
+                    const idNo = search.get('userId') || '';
+                    // show menu
+                    $menu.trigger('click');
+                    const $infoTab = $('[class^="TabBar__TabBarItem"]:last-child');
+                    $infoTab.trigger('click');
+                    const cover = $("[class^='InformationPanel__InformationCover']").attr('src');
+                    const title = $("[class^='InformationPanel__InformationTitle']").text();
+                    // hide menu
+                    $menu.trigger('click');
 
-                await downloadFile(idNo, book);
-            });
+                    const book: Book = {
+                        assetUUID,
+                        cover,
+                        title,
+                    };
+
+                    await downloadFile(idNo, book);
+
+                    $(e.currentTarget).css('display', 'inherit');
+                });
             if($export.length !== 0) {
                 clearInterval(intervalId);
                 $('[aria-label="搜尋"]').after($export);
+            } else if(timeout === 10) {
+                clearInterval(intervalId);
             }
+            timeout += 1;
         }, 1000);
     }
 }
