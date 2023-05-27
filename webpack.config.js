@@ -4,11 +4,12 @@ module.exports = {
   mode: "development",
   devtool: "inline-source-map",
   entry: {
-    main: "./src/content_script.ts",
+    "content-script": "./src/content_script.ts",
+    "background": "./src/background.ts"
   },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: "content-script-bundle.js" // <--- Will be compiled to this single file
+    filename: "[name]-bundle.js"
   },
   resolve: {
     modules: [
