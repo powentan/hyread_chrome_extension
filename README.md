@@ -16,7 +16,8 @@ make package
 ## TODO
 - [X] Rewrite this to typescript
 - [X] Add unit testing
-- [ ] Add exporting function for online viewing
+- [X] Add exporting function for online viewing
+- [ ] Add Readwise reader API integration
 - [ ] Customize exporting format
 - [ ] Integrate with other services
   - [ ] Zapier
