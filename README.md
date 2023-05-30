@@ -18,6 +18,8 @@ make package
 - [X] Add unit testing
 - [X] Add exporting function for online viewing
 - [ ] Add Readwise reader API integration
+- [ ] Add a config for how to group the annotation
+  - [ ] Sort by update time
 - [ ] Customize exporting format
 - [ ] Integrate with other services
   - [ ] Zapier
