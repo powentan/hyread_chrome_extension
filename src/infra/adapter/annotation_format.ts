@@ -1,11 +1,6 @@
 import { Book, Annotation } from '../../domain/model/book';
 import { AnnotationFormatPort } from 'domain/repo/annotation_format';
 
-type AnnotationDetail = {
-    text: string;
-    notes?: string | null;
-}
-
 
 export default class AnnotationFormatAdapter implements AnnotationFormatPort
 {
@@ -17,14 +12,16 @@ export default class AnnotationFormatAdapter implements AnnotationFormatPort
         this.annotations = annotations;
     }
 
-    _mergeAnnotationByChapter(annotations: Array<Annotation>): Record<string, Array<AnnotationDetail>> {
-        let mergedNotes: Record<string, Array<AnnotationDetail>> = {};
-        // for(let annotation of this.annotations) {
+    _mergeAnnotationByChapter(annotations: Array<Annotation>): Array<Array<Annotation>> {
+        let mergedNotes: Record<string, Array<Annotation>> = {};
+
         for(let annotation of annotations) {
             let title = annotation.chapterTitle;
             let noteInfo = {
+                chapterTitle: title,
                 text: annotation.text,
                 notes: annotation.notes,
+                spineIndex: annotation.spineIndex
             };
             if(title in mergedNotes) {
                 mergedNotes[title].push(noteInfo);
@@ -32,24 +29,25 @@ export default class AnnotationFormatAdapter implements AnnotationFormatPort
                 mergedNotes[title] = [noteInfo];
             }
         }
-
-        return mergedNotes;
+        return Object.values(mergedNotes).sort(
+            (a: Array<Annotation>, b: Array<Annotation>) => {
+               return a[0].spineIndex - b[0].spineIndex;
+            }
+        );
     }
 
-    // toMarkdown(annotations: Array<Annotation>): string {
     toMarkdown(): string {
-        // let mergedNotes = this._mergeAnnotationByChapter(annotations);
-        let mergedNotes = this._mergeAnnotationByChapter(this.annotations);
+        let mergedAnnotations = this._mergeAnnotationByChapter(this.annotations);
+        console.log(mergedAnnotations);
 
         let markdown = `# ${this.book.title}\n![${this.book.title}](${this.book.cover})\n`;
-        for(let chapter in mergedNotes) {
-            let noteInfos = mergedNotes[chapter];
-            
-            markdown += `## ${chapter}\n`;
-            for(let noteInfo of noteInfos) {
-                markdown += `> ${noteInfo.text}\n`
-                if(noteInfo.notes != null) {
-                    markdown += `> 心得筆記: ${noteInfo.notes}\n`
+        for(const annotations of mergedAnnotations) {
+            const chapterTitle = annotations[0].chapterTitle;
+            markdown += `## ${chapterTitle}\n`;
+            for(let annotation of annotations) {
+                markdown += `> ${annotation.text}\n`
+                if(annotation.notes != null) {
+                    markdown += `> 心得筆記: ${annotation.notes}\n`
                 }
                 markdown += '\n';
             }

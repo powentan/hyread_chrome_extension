@@ -18,6 +18,7 @@ type Annotation = {
     chapterTitle: string;
     text: string;
     notes?: string;
+    spineIndex: number;
 };
 
 type AnnotationResultItem = {

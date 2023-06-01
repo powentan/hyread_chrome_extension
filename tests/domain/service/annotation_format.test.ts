@@ -18,21 +18,25 @@ describe('test formatter service', () => {
                 chapterTitle: 'chapter title 1',
                 text: 'annotation text',
                 notes: 'notes text',
+                spineIndex: 2,
             },
             {
                 chapterTitle: 'chapter title 1',
                 text: 'annotation text 2',
                 notes: 'notes text 2',
+                spineIndex: 2,
             },
             {
                 chapterTitle: 'chapter title 2',
                 text: 'annotation text',
                 notes: 'notes text',
+                spineIndex: 1,
             },
             {
                 chapterTitle: 'chapter title 2',
                 text: 'annotation text 2',
                 notes: 'notes text',
+                spineIndex: 1,
             },
         ];
         const annotationService = new AnnotationService(
