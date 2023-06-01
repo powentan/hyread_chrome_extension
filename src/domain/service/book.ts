@@ -25,6 +25,7 @@ export class BookService {
                     chapterTitle: x.chapterTitle,
                     text: x.text,
                     notes: x.notes,
+                    spineIndex: x.spineIndex,
                 };
             });
             console.log(_notes);
