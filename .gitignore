@@ -1,6 +1,5 @@
-dist/
 node_modules/
-package/
 coverage/
+build/
 *.zip
 package-lock.json
