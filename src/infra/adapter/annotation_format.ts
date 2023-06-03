@@ -44,7 +44,7 @@ export default class AnnotationFormatAdapter implements AnnotationFormatPort
         for(const annotations of mergedAnnotations) {
             const chapterTitle = annotations[0].chapterTitle;
             markdown += `## ${chapterTitle}\n`;
-            for(let annotation of annotations) {
+            for(let annotation of annotations.reverse()) {
                 markdown += `> ${annotation.text}\n`
                 if(annotation.notes != null) {
                     markdown += `> 心得筆記: ${annotation.notes}\n`
