@@ -8,7 +8,7 @@ module.exports = {
     "background": "./src/background.ts"
   },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './build/dist'),
     filename: "[name]-bundle.js"
   },
   resolve: {

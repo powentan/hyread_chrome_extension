@@ -4,8 +4,8 @@
   },
   "scripts": {
     "setup": "npm install .",
-    "build": "npx webpack",
-    "package": "rm -rf package package.zip; mkdir package; cp -rf dist manifest.json package/.; zip -r hyread_annotate_exporter.zip package;",
+    "build": "npx webpack; cp -rf options manifest.json build/.",
+    "package": "zip -r hyread_annotate_exporter.zip build;",
     "test": "jest --coverage --verbose"
   },
   "devDependencies": {
