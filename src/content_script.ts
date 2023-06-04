@@ -46,29 +46,35 @@ function init() {
     const idNo = $('[name="readerCode"]').val();
 
     // inject for bookcase and historical
-    const $exportButton = $(exportAnnotationButton);
-    $('.infor-list .toolbarblock .toolbar:last-child').after($exportButton);
-    $('.infor-list .toolbarblock .toolbar:last-child').on('click', async e => {
-        $(e.target).addClass('disabled');
-        console.log(idNo);
-        console.log(e.currentTarget);
-        // toolbarblock
-        let $toolbarblock = $(e.currentTarget).parent();
-        let $inforList = $toolbarblock.parent();
-        const book = parseBookInfo($toolbarblock, $inforList)
+    $.each($('.infor-list .toolbarblock .toolbar:last-child'), (index, elem) => {
+        const firstItemText = $($('.infor-list .toolbarblock .toolbar:first-child')[index]).text().trim();
+        if(firstItemText === '線上閱讀') {
+            const $exportButton = $(exportAnnotationButton).clone();
+            $(elem).after($exportButton);
+            $(elem).next().on('click', async e => {
+                $(e.target).addClass('disabled');
+                console.log(idNo);
+                console.log(e.currentTarget);
+                // toolbarblock
+                let $toolbarblock = $(e.currentTarget).parent();
+                let $inforList = $toolbarblock.parent();
+                const book = parseBookInfo($toolbarblock, $inforList)
 
-        // XXX: fix typing issue
-        let _idNo = '';
-        if(typeof idNo === 'string') {
-            _idNo = idNo;
-        } else {
-            _idNo = idNo[0];
+                // XXX: fix typing issue
+                let _idNo = '';
+                if(typeof idNo === 'string') {
+                    _idNo = idNo;
+                } else {
+                    _idNo = idNo[0];
+                }
+
+                await downloadFile(_idNo, book);
+
+                $(e.target).removeClass('disabled');
+            });
         }
-
-        await downloadFile(_idNo, book);
-
-        $(e.target).removeClass('disabled');
     });
+
     // inject for online reader
     if(window.location.pathname.indexOf('/openbook2.jsp') !== -1) {
         let timeout = 0;

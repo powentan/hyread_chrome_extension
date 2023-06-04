@@ -4,7 +4,7 @@
   },
   "scripts": {
     "setup": "npm install .",
-    "build": "npx webpack; cp -rf options manifest.json build/.",
+    "build": "rm -rf build; npx webpack; cp -rf manifest.json build/.",
     "package": "zip -r hyread_annotate_exporter.zip build;",
     "test": "jest --coverage --verbose"
   },
