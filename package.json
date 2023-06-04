@@ -9,6 +9,7 @@
     "test": "jest --coverage --verbose"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.237",
     "@types/jest": "^29.5.1",
     "@types/node": "^20.2.1",
     "@types/superagent": "^4.1.17",

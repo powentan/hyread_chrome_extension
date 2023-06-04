@@ -1,11 +1,11 @@
 import HyReadServiceAdapter from "infra/adapter/hyread_service";
-import ExportFormatAdapter from "infra/adapter/export_format";
-import AnnotationFormatAdapter from "infra/adapter/annotation_format";
+import ExportToFileAdapter from "infra/adapter/exporting/export_to_file";
+import MarkdownFormatAdapter from "infra/adapter/markdown_format/markdown_format";
 import superagent from "superagent";
 import { BookService } from "domain/service/book";
 import { Book } from "domain/model/book";
 import { AnnotationService } from "domain/service/annotation";
-import { ExportService } from "domain/service/export";
+import { ExportingService } from "domain/service/exporting";
 
 
 async function downloadFile(idNo: string, book: Book) {
@@ -20,15 +20,14 @@ async function downloadFile(idNo: string, book: Book) {
     const annotationService = new AnnotationService(
         book,
         annotations,
-        new AnnotationFormatAdapter(book, annotations),
+        new MarkdownFormatAdapter(book, annotations),
     );
-    const markdown = annotationService.toFormat('markdown');
-    const exportService = new ExportService(
+    const annotationString = annotationService.toString();
+    const exportService = new ExportingService(
         book,
-        new ExportFormatAdapter('text/plain'),
+        new ExportToFileAdapter('text/plain'),
     );
-    exportService.to('file', {
-        data: markdown,
+    exportService.export(annotationString, {
         fileName: `${book.title}.md`,
     });
 }

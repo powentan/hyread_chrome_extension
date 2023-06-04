@@ -1,8 +1,8 @@
-import { Book, Annotation } from '../../domain/model/book';
+import { Book, Annotation } from '../../../domain/model/book';
 import { AnnotationFormatPort } from 'domain/repo/annotation_format';
 
 
-export default class AnnotationFormatAdapter implements AnnotationFormatPort
+export default class MarkdownFormatAdapter implements AnnotationFormatPort
 {
     book: Book;
     annotations: Array<Annotation>;
@@ -36,7 +36,7 @@ export default class AnnotationFormatAdapter implements AnnotationFormatPort
         );
     }
 
-    toMarkdown(): string {
+    toString(): string {
         let mergedAnnotations = this._mergeAnnotationByChapter(this.annotations);
         console.log(mergedAnnotations);
 

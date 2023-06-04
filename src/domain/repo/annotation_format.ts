@@ -4,5 +4,5 @@ export interface AnnotationFormatPort {
     book: Book;
     annotations: Array<Annotation>;
 
-    toMarkdown(): string;
+    toString(): string;
 }
