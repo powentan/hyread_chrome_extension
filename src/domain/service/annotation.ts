@@ -16,11 +16,9 @@ export class AnnotationService {
         this.annotationFormatPort = annotationFormatPort;
     }
 
-    toFormat(type: string): string {
-        let result = '';
-        if(type === 'markdown') {
-            result = this.annotationFormatPort.toMarkdown()
-        }
+    toString(): string {
+        const result = this.annotationFormatPort.toString()
+        console.log(`toFormat result: ${result}`)
 
         return result;
     }

@@ -1,13 +1,13 @@
-import { ExportFormatPort } from '../../domain/repo/export_format';
+import { ExportingPort } from '../../../domain/repo/exporting';
 
-export default class ExportFormatAdapter implements ExportFormatPort {
+export default class ExportToFileAdapter implements ExportingPort {
     fileType: string;
 
     constructor(fileType: string = 'text/plain') {
         this.fileType = fileType;
     }
 
-    downloadToFile(data: string, fileName: string): void {
+    exportDataTo(data: string, fileName: string): void {
         const blob = new Blob([data], { type: this.fileType });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");

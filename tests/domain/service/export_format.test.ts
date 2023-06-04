@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { Book } from 'domain/model/book';
-import { ExportService } from "domain/service/export";
-import ExportFormatAdapter from "infra/adapter/export_format";
+import { ExportingService } from "domain/service/exporting";
+import ExportToFileAdapter from "infra/adapter/exporting/export_to_file";
 
 describe('test export format service', () => {
     test('test export service: file type', () => {
@@ -12,12 +12,12 @@ describe('test export format service', () => {
             title: 'book title',
             cover: 'https://book-cover',
         };
-        const exportFormatAdapter = new ExportFormatAdapter('text/plain');
+        const exportFormatAdapter = new ExportToFileAdapter('text/plain');
         const mockDownloadToFile = jest
-            .spyOn(exportFormatAdapter, 'downloadToFile')
+            .spyOn(exportFormatAdapter, 'exportDataTo')
             .mockImplementation(() => {});
-        const exportService = new ExportService(book, exportFormatAdapter);
-        exportService.to('file', {
+        const exportingService = new ExportingService(book, exportFormatAdapter);
+        exportingService.export('file', {
             data: '',
             fileName: '',
         });
