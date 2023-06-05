@@ -18,6 +18,10 @@ make package
 - [X] Add unit testing
 - [X] Add exporting function for online viewing
 - [ ] Add Readwise reader API integration
+- [ ] OAuth integration: https://developers.dropbox.com/oauth-guide
+- [ ] Integrate cloud storage
+  - [ ] Google Drive
+  - [ ] Dropbox
 - [ ] Add a config for how to group the annotation
   - [ ] Sort by update time
 - [ ] Customize exporting format
