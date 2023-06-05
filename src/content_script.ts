@@ -43,7 +43,7 @@ function parseBookInfo($toolbarblock: Cash, $inforList: Cash): Book {
 
 function init() {
     console.log('init content script')
-    const idNo = $('[name="readerCode"]').val();
+    const idNo = $('[name="readerCode"]').val() as string;
 
     // inject for bookcase and historical
     $.each($('.infor-list .toolbarblock .toolbar:last-child'), (index, elem) => {
@@ -60,15 +60,7 @@ function init() {
                 let $inforList = $toolbarblock.parent();
                 const book = parseBookInfo($toolbarblock, $inforList)
 
-                // XXX: fix typing issue
-                let _idNo = '';
-                if(typeof idNo === 'string') {
-                    _idNo = idNo;
-                } else {
-                    _idNo = idNo[0];
-                }
-
-                await downloadFile(_idNo, book);
+                await downloadFile(idNo, book);
 
                 $(e.target).removeClass('disabled');
             });
