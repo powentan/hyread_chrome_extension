@@ -5,7 +5,8 @@ module.exports = {
   devtool: "inline-source-map",
   entry: {
     "content-script": "./src/content_script.ts",
-    "background": "./src/background.ts"
+    "background": "./src/background.ts",
+    "option": "./src/options.ts"
   },
   output: {
     path: path.resolve(__dirname, './build/dist'),
