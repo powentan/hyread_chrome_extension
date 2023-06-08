@@ -30,7 +30,7 @@ describe('test hyread book service', () => {
             cover: 'https://book-cover',
         };
         const idNo = 'A123456789';
-        const hyReadServiceAdapter = new HyReadServiceAdapter(idNo, jest.fn());
+        const hyReadServiceAdapter = new HyReadServiceAdapter(idNo);
         const bookService = new BookService(
             book,
             hyReadServiceAdapter,

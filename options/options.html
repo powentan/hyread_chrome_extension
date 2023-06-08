@@ -10,10 +10,16 @@
     <h2>服務整合</h2>
     <div style="width: 800px">
         <div><h4>Readwise Reader</h4></div>
-        <span>access_token: </span><input style="width: 400px; margin-right: 10px" type="text" id="readwiseAccessToken" /><a href="https://readwise.io/access_token" target="_blank">請取得Readwise Reader acess_token填在此處</a>
+        <span>access_token: </span><input style="width: 400px; margin-right: 10px" type="text" id="readwiseAccessToken" /><a href="https://readwise.io/access_token" target="_blank">取得Readwise Reader acess_token</a>
     </div>
     <div>
-        <button id="save">Save</button>
+        <select id="export_default">
+            <option value="file">匯出到檔案</option>
+            <option value="readwise">匯出到readwise reader</option>
+        </select>
+    </div>
+    <div>
+        <button id="save">儲存設定</button>
     </div>
 
     <script src="../dist/option-bundle.js"></script>

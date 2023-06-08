@@ -2,7 +2,12 @@ import { exportAnnotationButton, fileExportIcon } from './app/ui';
 import $ from "cash-dom";
 import { Cash } from "cash-dom";
 import { Book } from './domain/model/book';
-import { downloadFile } from './app/page';
+import { exportToService } from './app/page';
+import ExtensionSettingsManager from 'infra/adapter/extension_settings';
+import { ExtensionSettings } from 'domain/model/settings';
+import { ExportingType } from 'domain/repo/exporting';
+import WebMessagePassing from 'infra/adapter/chrome/web_message';
+
 
 function parseOnlineReadingUrl(url: string): Book {
     let search = new URL(url, window.location.origin).searchParams;
@@ -41,9 +46,33 @@ function parseBookInfo($toolbarblock: Cash, $inforList: Cash): Book {
     return book;
 }
 
-function init() {
+async function sendExportMesssage(settings: ExtensionSettings, payload: any, webMessagePassing: WebMessagePassing) {
+    const exportDefault = settings.export_default;
+
+    switch(exportDefault) {
+        case ExportingType.Readwise:
+            await webMessagePassing.sendMessage({
+                ...payload,
+                exportingType: exportDefault,
+            });
+            break;
+        case ExportingType.File:
+            await webMessagePassing.sendMessage({
+                ...payload,
+                exportingType: exportDefault,
+            });
+            break;
+    }
+}
+
+const webMessagePassing = new WebMessagePassing();
+
+async function init() {
     console.log('init content script')
     const idNo = $('[name="readerCode"]').val() as string;
+
+    // append dialog UI
+    //  $('.main_content').append($(exportDialog));
 
     // inject for bookcase and historical
     $.each($('.infor-list .toolbarblock .toolbar:last-child'), (index, elem) => {
@@ -52,6 +81,7 @@ function init() {
             const $exportButton = $(exportAnnotationButton).clone();
             $(elem).after($exportButton);
             $(elem).next().on('click', async e => {
+                const settings = await settingsManager.get();
                 $(e.target).addClass('disabled');
                 console.log(idNo);
                 console.log(e.currentTarget);
@@ -60,9 +90,15 @@ function init() {
                 let $inforList = $toolbarblock.parent();
                 const book = parseBookInfo($toolbarblock, $inforList)
 
-                await downloadFile(idNo, book);
-
-                $(e.target).removeClass('disabled');
+                // wait for complete
+                webMessagePassing.onMessage(() => {
+                    $(e.target).removeClass('disabled');
+                });
+                await sendExportMesssage(settings, {
+                    idNo,
+                    book,
+                    accessToken: settings.readwise?.accessToken,
+                }, webMessagePassing);
             });
         }
     });
@@ -76,6 +112,7 @@ function init() {
                 .clone().addClass('export').attr('aria-label', '匯出')
                 .html(fileExportIcon)
                 .on('click', async e => {
+                    const settings = await settingsManager.get();
                     $(e.currentTarget).css('display', 'none');
 
                     let $menu = $('[aria-label="目次"]');
@@ -97,9 +134,14 @@ function init() {
                         title,
                     };
 
-                    await downloadFile(idNo, book);
-
-                    $(e.currentTarget).css('display', 'inherit');
+                    webMessagePassing.onMessage(() => {
+                        $(e.currentTarget).css('display', 'inherit');
+                    });
+                    await sendExportMesssage(settings, {
+                        idNo,
+                        book,
+                        accessToken: settings.readwise?.accessToken,
+                    }, webMessagePassing);
                 });
             if($export.length !== 0) {
                 clearInterval(intervalId);
@@ -112,6 +154,7 @@ function init() {
     }
 }
 
-$(document).ready(function() {
+const settingsManager = new ExtensionSettingsManager();
+$(document).ready(async function() {
     init();
 });
