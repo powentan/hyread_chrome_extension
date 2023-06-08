@@ -1,18 +1,33 @@
 import { ExportingPort } from '../../../domain/repo/exporting';
+import { Book } from 'domain/model/book';
+
+function createDataUrl(content: string, mimeType: string): string {
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+    return `data:${mimeType};base64,${base64Content}`;
+}
+
+function sanitizeFilename(filename: string): string {
+    const invalidCharactersRegex = /[/\\?%*:|"<>]/g;
+    return filename.replace(invalidCharactersRegex, '_');
+}
 
 export default class ExportToFileAdapter implements ExportingPort {
     fileType: string;
 
-    constructor(fileType: string = 'text/plain') {
+    constructor(fileType: string = 'text/markdown') {
         this.fileType = fileType;
     }
 
-    exportDataTo(data: string, fileName: string): void {
-        const blob = new Blob([data], { type: this.fileType });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        a.click();
+    async exportDataTo(data: string, book: Book): Promise<boolean> {
+        const fileName = `${book.title}`;
+
+        const dataUrl = createDataUrl(data, this.fileType);
+        chrome.downloads.download({
+            url: dataUrl,
+            filename: sanitizeFilename(fileName) + '.md',
+            saveAs: true
+        });
+
+        return true;
     }
 }

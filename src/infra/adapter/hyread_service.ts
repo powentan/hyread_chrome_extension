@@ -1,16 +1,15 @@
 import { HyReadServicePort } from '../../domain/repo/hyread_service';
 import { Book, isHistoricalBook, AnnotationResultItem } from '../../domain/model/book';
+import querystring from 'querystring';
 
 export default class HyReadServiceAdapter implements HyReadServicePort {
     appId = '8a8a84c87216ed3301737517e6770000';
     apiKey = '8a8a84c87216ed3301737517e6770000';
     apiPath = 'https://service.ebook.hyread.com.tw/DataService/1/classes';
     idNo: string;
-    superagent: any;
 
-    constructor(idNo: string, superagent: any) {
+    constructor(idNo: string) {
         this.idNo = idNo;
-        this.superagent = superagent;
     }
 
     async getAnnotation(book: Book): Promise<Array<AnnotationResultItem>> {
@@ -35,16 +34,22 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
             };
         }
 
-        let res = await this.superagent
-            .get(`${this.apiPath}/epubAnnotation`)
-            .query({where: JSON.stringify(query)})
-            .set('HyDS-Application-Id', this.appId)
-            .set('HyDS-REST-API-Key', this.apiKey)
-            .set('accept', 'json')
+        const queryString = querystring.stringify({
+            where: JSON.stringify(query),
+        });
+        const res = await fetch(`${this.apiPath}/epubAnnotation?${queryString}`, {
+            method: 'GET',
+            headers: {
+                'HyDS-Application-Id': this.appId,
+                'HyDS-REST-API-Key': this.apiKey,
+                'accept': 'json',
+            },
+        })
 
 
         if(res.status === 200) {
-            return res.body.results;
+            const body = await res.json();
+            return body.results;
         } else {
             return [];
         }

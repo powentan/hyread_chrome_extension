@@ -13,8 +13,7 @@ export class ExportingService {
         this.exportingPort = exportingPort;
     }
 
-    export(data: string, payload: any) {
-        const { fileName } = payload;
-        this.exportingPort.exportDataTo(data, fileName);
+    async export(data: string): Promise<boolean> {
+        return await this.exportingPort.exportDataTo(data, this.book);
     }
 }

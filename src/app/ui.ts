@@ -15,4 +15,20 @@ const fileExportIcon = `
 </svg>
 `;
 
-export { exportAnnotationButton, fileExportIcon };
+const exportDialog = `
+    <dialog id="exporting-dialog" style="padding: 10px">
+        <div style="font-size: 20px; margin: 10px;">匯出筆記</div>
+        <div class="toolbar">
+            <a class="btn btn-default btn-blue" id="export-to-file">
+                <i class="icon icon-cloud-download"></i>
+                到檔案
+            </a>
+            <a class="btn btn-default btn-blue" id="export-to-readwise">
+                <i class="icon icon-cloud-download"></i>
+                到Readwise Reader
+            </a>
+        </div>
+    </dialog>
+`;
+
+export { exportAnnotationButton, fileExportIcon, exportDialog };
