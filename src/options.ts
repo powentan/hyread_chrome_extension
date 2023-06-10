@@ -1,19 +1,21 @@
 import $ from "cash-dom";
 import { ExtensionSettings } from "domain/model/settings";
 import ExtensionSettingsManager from "infra/adapter/extension_settings";
-import ExtensionMessagePassing from "infra/adapter/chrome/extension_message";
 import { ExportingType } from "domain/repo/exporting";
+import '../css/options.scss';
 
 const settingsManager = new ExtensionSettingsManager();
-const messagePassing = new ExtensionMessagePassing();
-
 const saveOptions = () => {
+    const titlePrefix = $('#titlePrefix').val();
     const readwiseAccessToken = $('#readwiseAccessToken').val(); 
-    const exportDefault = $('#export_default').val();
+    const exportDefault = $('#exportDefault').val();
     const settings = {
-        export_default: exportDefault,
+        exportDefault: exportDefault,
         readwise: {
             accessToken: readwiseAccessToken,
+        },
+        annotation: {
+            titlePrefix,
         }
     };
     settingsManager.set(settings, () => {
@@ -23,7 +25,6 @@ const saveOptions = () => {
         setTimeout(() => {
             $status.text('');
         }, 3000);
-        messagePassing.sendMessage({command: 'refresh'});
     });
 };
 
@@ -31,7 +32,8 @@ const restoreOptions = async () => {
     const settings: ExtensionSettings = await settingsManager.get();
     console.log(settings);
     $('#readwiseAccessToken').val(settings.readwise?.accessToken || '');
-    $('#export_default').val(settings.export_default || ExportingType.File);
+    $('#exportDefault').val(settings.exportDefault || ExportingType.File);
+    $('#titlePrefix').val(settings.annotation?.titlePrefix || '');
   };
 
 document.addEventListener('DOMContentLoaded', restoreOptions);

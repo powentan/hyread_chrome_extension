@@ -5,11 +5,11 @@ type ReadWiseSettings = {
 };
 
 type AnnotationSettings = {
-    filePrefix?: string | null;
+    titlePrefix?: string | null;
 };
 
 type ExtensionSettings = {
-    export_default?: ExportingType;
+    exportDefault?: ExportingType;
     readwise?: ReadWiseSettings;
     annotation?: AnnotationSettings;
 };

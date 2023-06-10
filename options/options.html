@@ -1,27 +1,40 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HyRead圖書匯出設定頁面</title>
-  </head>
   <body>
-    <div id="status" style="color: red"></div>
-    <label>
-    <h2>服務整合</h2>
-    <div style="width: 800px">
-        <div><h4>Readwise Reader</h4></div>
-        <span>access_token: </span><input style="width: 400px; margin-right: 10px" type="text" id="readwiseAccessToken" /><a href="https://readwise.io/access_token" target="_blank">取得Readwise Reader acess_token</a>
-    </div>
-    <div>
-        <select id="export_default">
-            <option value="file">匯出到檔案</option>
-            <option value="readwise">匯出到readwise reader</option>
-        </select>
-    </div>
-    <div>
-        <button id="save">儲存設定</button>
+    <div class="container">
+      <div id="status" style="color: red"></div>
+      <h1>HyrRead圖書匯出設定頁面</h1>
+      <div><h4>Readwise Reader</h4></div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Access Token</span>
+        <input type="text" id="readwiseAccessToken" class="form-control">
+        <a class="link-primary" href="https://readwise.io/access_token" target="_blank">Access Token取得頁面</a>
+      </div>
+      <div class="input-group mb-3">
+          <div class="input-group-prepand">
+              <label class="input-group-text" for="exportDefault">預設匯出到</label>
+          </div>
+          <select class="custom-select" id="exportDefault">
+              <option value="file" selected>檔案</option>
+              <option value="readwise">readwise reader</option>
+          </select>
+      </div>
+      <div class="input-group mb-3">
+        <div><h4>筆記設定</h4></div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">筆記標題前綴</span>
+          <input type="text" id="titlePrefix" class="form-control" placeholder="EX: [筆記]">
+        </div>
+      </div>
+      <div>
+          <button class="btn btn-primary" id="save">儲存設定</button>
+      </div>
     </div>
 
-    <script src="../dist/option-bundle.js"></script>
+    <script src="options-bundle.js"></script>
   </body>
 </html>

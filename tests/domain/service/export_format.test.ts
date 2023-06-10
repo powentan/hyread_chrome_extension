@@ -4,17 +4,29 @@ import { ExportingService } from "domain/service/exporting";
 import ExportToFileAdapter from "infra/adapter/exporting/export_to_file";
 import ExportToReadwiseReader from 'infra/adapter/exporting/export_to_readwise_reader';
 import { ReadwiseReader } from 'infra/adapter/readwise_reader';
+import { ExportingType } from 'domain/repo/exporting';
+import { ExtensionSettings } from 'domain/model/settings';
 
 describe('test export format service', () => {
+    const book: Book = {
+        assetUUID: 'asset_uuid',
+        eid: 'eid',
+        ownerCode: 'owner_code',
+        title: 'book title',
+        cover: 'https://book-cover',
+    };
+    const settings: ExtensionSettings = {
+        exportDefault: ExportingType.File,
+        annotation: {
+            titlePrefix: '',
+        },
+        readwise: {
+            accessToken: '',
+        },
+    };
+
     test('test export service: file type', () => {
-        const book: Book = {
-            assetUUID: 'asset_uuid',
-            eid: 'eid',
-            ownerCode: 'owner_code',
-            title: 'book title',
-            cover: 'https://book-cover',
-        };
-        const exportToFileAdapter = new ExportToFileAdapter('text/markdown');
+        const exportToFileAdapter = new ExportToFileAdapter('text/markdown', settings);
         const mockExportToFile = jest
             .spyOn(exportToFileAdapter, 'exportDataTo')
             .mockImplementation(async () => { return true;});
@@ -24,14 +36,10 @@ describe('test export format service', () => {
     });
 
     test('test export service: readwise', () => {
-        const book: Book = {
-            assetUUID: 'asset_uuid',
-            eid: 'eid',
-            ownerCode: 'owner_code',
-            title: 'book title',
-            cover: 'https://book-cover',
-        };
-        const exportToReadwiseReader = new ExportToReadwiseReader(new ReadwiseReader('dummy_access_token'));
+        const exportToReadwiseReader = new ExportToReadwiseReader(
+            new ReadwiseReader('dummy_access_token'),
+            settings,
+        );
         const mockExportToReadwiseReader = jest
             .spyOn(exportToReadwiseReader, 'exportDataTo')
             .mockImplementation(async () => { return true;});

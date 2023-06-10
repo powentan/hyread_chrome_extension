@@ -2,6 +2,8 @@ import { describe, test, expect } from '@jest/globals';
 import { Book } from 'domain/model/book';
 import MarkdownFormatAdapter from 'infra/adapter/markdown_format/markdown_format';
 import { AnnotationService } from 'domain/service/annotation';
+import { ExtensionSettings } from 'domain/model/settings';
+import { ExportingType } from 'domain/repo/exporting';
 
 
 describe('test formatter service', () => {
@@ -39,12 +41,21 @@ describe('test formatter service', () => {
             spineIndex: 1,
         },
     ];
+    const settings: ExtensionSettings = {
+        exportDefault: ExportingType.File,
+        annotation: {
+            titlePrefix: '',
+        },
+        readwise: {
+            accessToken: '',
+        },
+    };
 
     test('test markdown format', () => {
         const annotationService = new AnnotationService(
             book,
             annotations,
-            new MarkdownFormatAdapter(book, annotations),
+            new MarkdownFormatAdapter(book, annotations, settings),
         )
         const markdown = annotationService.toString();
 
