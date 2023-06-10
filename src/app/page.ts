@@ -12,7 +12,6 @@ import { ExtensionSettings } from "domain/model/settings";
 
 
 async function exportToService(idNo: string, book: Book, settings: ExtensionSettings): Promise<boolean> {
-    //  accessToken: string = '', exportingType: ExportingType = ExportingType.File): Promise<boolean> {
     const bookService = new BookService(
         book,
         new HyReadServiceAdapter(idNo),

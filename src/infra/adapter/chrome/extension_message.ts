@@ -8,7 +8,7 @@ export default class ExtensionMessagePassing implements MessagePassingPort {
                 lastFocusedWindow: true,
             }
         );
-        if(tab.id != null) {
+        if(tab != null && tab.id != null) {
             const response = await chrome.tabs.sendMessage(tab.id, message);
             console.log(response);
         } else {

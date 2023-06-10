@@ -60,6 +60,7 @@ module.exports = {
       new HtmlWebpackPlugin({
           template: './options/options.html',
           filename: './options-bundle.html',
+          chunks: ["options"],
       })
   ]
 };

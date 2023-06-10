@@ -1,11 +1,9 @@
 import ExtensionMessagePassing from "infra/adapter/chrome/extension_message";
 import { exportToService } from "app/page";
-import { ExportingType } from "domain/repo/exporting";
-import { ExtensionSettings } from "domain/model/settings";
 
 const messagePassing = new ExtensionMessagePassing();
 
-messagePassing.onMessage(async (request: any, sender: chrome.runtime.MessageSender) => {
+messagePassing.onMessage(async (request: any, sender: chrome.runtime.MessageSender, sendResponse) => {
     console.log(request);
     const { payload, settings } = request;
     const result = await exportToService(payload.idNo, payload.book, settings);
@@ -13,4 +11,7 @@ messagePassing.onMessage(async (request: any, sender: chrome.runtime.MessageSend
     messagePassing.sendMessage({
         isOk: result,
     });
+    // sendResponse({
+    //     isOK: result,
+    // });
 });
