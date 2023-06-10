@@ -1,5 +1,6 @@
 import { ExportingPort } from '../../../domain/repo/exporting';
 import { Book } from 'domain/model/book';
+import { ExtensionSettings } from 'domain/model/settings';
 
 function createDataUrl(content: string, mimeType: string): string {
     const base64Content = btoa(unescape(encodeURIComponent(content)));
@@ -13,13 +14,15 @@ function sanitizeFilename(filename: string): string {
 
 export default class ExportToFileAdapter implements ExportingPort {
     fileType: string;
+    settings: ExtensionSettings;
 
-    constructor(fileType: string = 'text/markdown') {
+    constructor(fileType: string = 'text/markdown', settings: ExtensionSettings) {
         this.fileType = fileType;
+        this.settings = settings;
     }
 
     async exportDataTo(data: string, book: Book): Promise<boolean> {
-        const fileName = `${book.title}`;
+        const fileName = `${this.settings.annotation?.titlePrefix}${book.title}`;
 
         const dataUrl = createDataUrl(data, this.fileType);
         chrome.downloads.download({

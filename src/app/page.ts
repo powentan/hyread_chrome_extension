@@ -8,9 +8,11 @@ import { AnnotationService } from "domain/service/annotation";
 import { ExportingService } from "domain/service/exporting";
 import { ExportingPort, ExportingType } from "domain/repo/exporting";
 import { ReadwiseReader } from "infra/adapter/readwise_reader";
+import { ExtensionSettings } from "domain/model/settings";
 
 
-async function exportToService(idNo: string, book: Book, accessToken: string = '', exportingType: ExportingType = ExportingType.File) {
+async function exportToService(idNo: string, book: Book, settings: ExtensionSettings): Promise<boolean> {
+    //  accessToken: string = '', exportingType: ExportingType = ExportingType.File): Promise<boolean> {
     const bookService = new BookService(
         book,
         new HyReadServiceAdapter(idNo),
@@ -21,15 +23,15 @@ async function exportToService(idNo: string, book: Book, accessToken: string = '
     const annotationService = new AnnotationService(
         book,
         annotations,
-        new MarkdownFormatAdapter(book, annotations),
+        new MarkdownFormatAdapter(book, annotations, settings),
     );
     
-    let exportAdapter: ExportingPort = new ExportToFileAdapter('text/markdown');
-    switch(exportingType) {
+    let exportAdapter: ExportingPort = new ExportToFileAdapter('text/markdown', settings);
+    switch(settings.exportDefault) {
         case ExportingType.File:
             break;
         case ExportingType.Readwise:
-            exportAdapter = new ExportToReadwiseReader(new ReadwiseReader(accessToken));
+            exportAdapter = new ExportToReadwiseReader(new ReadwiseReader(settings.readwise?.accessToken || ''), settings);
             break;
     }
 
@@ -39,7 +41,7 @@ async function exportToService(idNo: string, book: Book, accessToken: string = '
     );
     const annotationString = annotationService.toString();
     console.log('Ready to export to the service...');
-    await exportingService.export(annotationString);
+    return await exportingService.export(annotationString);
 }
 
 export { exportToService };

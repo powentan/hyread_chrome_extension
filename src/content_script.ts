@@ -47,22 +47,14 @@ function parseBookInfo($toolbarblock: Cash, $inforList: Cash): Book {
 }
 
 async function sendExportMesssage(settings: ExtensionSettings, payload: any, webMessagePassing: WebMessagePassing) {
-    const exportDefault = settings.export_default;
-
-    switch(exportDefault) {
-        case ExportingType.Readwise:
-            await webMessagePassing.sendMessage({
-                ...payload,
-                exportingType: exportDefault,
-            });
-            break;
-        case ExportingType.File:
-            await webMessagePassing.sendMessage({
-                ...payload,
-                exportingType: exportDefault,
-            });
-            break;
-    }
+    const message = {
+        payload,
+        settings,
+    };
+    await webMessagePassing.sendMessage({
+        payload,
+        settings,
+    });
 }
 
 const webMessagePassing = new WebMessagePassing();
@@ -91,13 +83,13 @@ async function init() {
                 const book = parseBookInfo($toolbarblock, $inforList)
 
                 // wait for complete
-                webMessagePassing.onMessage(() => {
+                webMessagePassing.onMessage((request) => {
+                    const { isOk } = request;
                     $(e.target).removeClass('disabled');
                 });
                 await sendExportMesssage(settings, {
                     idNo,
                     book,
-                    accessToken: settings.readwise?.accessToken,
                 }, webMessagePassing);
             });
         }
@@ -134,13 +126,13 @@ async function init() {
                         title,
                     };
 
-                    webMessagePassing.onMessage(() => {
+                    webMessagePassing.onMessage((request) => {
+                        const { isOk } = request;
                         $(e.currentTarget).css('display', 'inherit');
                     });
                     await sendExportMesssage(settings, {
                         idNo,
                         book,
-                        accessToken: settings.readwise?.accessToken,
                     }, webMessagePassing);
                 });
             if($export.length !== 0) {
