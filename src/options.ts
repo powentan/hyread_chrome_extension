@@ -9,8 +9,12 @@ const saveOptions = () => {
     const titlePrefix = $('#titlePrefix').val();
     const readwiseAccessToken = $('#readwiseAccessToken').val(); 
     const exportDefault = $('#exportDefault').val();
+    const fileExportFolder = $('#fileExportFolder').val();
     const settings = {
         exportDefault: exportDefault,
+        fileExport: {
+            folder: fileExportFolder,
+        },
         readwise: {
             accessToken: readwiseAccessToken,
         },
@@ -34,6 +38,7 @@ const restoreOptions = async () => {
     $('#readwiseAccessToken').val(settings.readwise?.accessToken || '');
     $('#exportDefault').val(settings.exportDefault || ExportingType.File);
     $('#titlePrefix').val(settings.annotation?.titlePrefix || '');
+    $('#fileExportFolder').val(settings.fileExport?.folder || '');
   };
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
