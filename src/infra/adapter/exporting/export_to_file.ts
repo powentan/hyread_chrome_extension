@@ -23,7 +23,7 @@ export default class ExportToFileAdapter implements ExportingPort {
 
     async exportDataTo(data: string, book: Book): Promise<boolean> {
         const fileName = `${this.settings.annotation?.titlePrefix}${book.title}`;
-        const defaultFolder = this.settings.fileExport?.folder || '';
+        const defaultFolder = this.settings.fileExport?.folder || '.';
         const downloadFilePath = `${defaultFolder}/${sanitizeFilename(fileName)}.md`;
 
         const dataUrl = createDataUrl(data, this.fileType);
