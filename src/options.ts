@@ -1,19 +1,23 @@
 import $ from "cash-dom";
 import { ExtensionSettings } from "domain/model/settings";
 import ExtensionSettingsManager from "infra/adapter/extension_settings";
-import { ExportingType } from "domain/repo/exporting";
+import { ExportingType, FormatType } from "domain/repo/exporting";
 import '../css/options.scss';
 
 const settingsManager = new ExtensionSettingsManager();
-const saveOptions = () => {
+const saveOptions = async () => {
+    const settings: ExtensionSettings = await settingsManager.get();
     const titlePrefix = $('#titlePrefix').val();
     const readwiseAccessToken = $('#readwiseAccessToken').val(); 
     const exportDefault = $('#exportDefault').val();
     const fileExportFolder = $('#fileExportFolder').val();
+    const fileExportFormat = $('#fileExportFormat').val();
     const settings = {
+        ...settings,
         exportDefault: exportDefault,
         fileExport: {
             folder: fileExportFolder,
+            format: fileExportFormat,
         },
         readwise: {
             accessToken: readwiseAccessToken,
@@ -39,7 +43,8 @@ const restoreOptions = async () => {
     $('#exportDefault').val(settings.exportDefault || ExportingType.File);
     $('#titlePrefix').val(settings.annotation?.titlePrefix || '');
     $('#fileExportFolder').val(settings.fileExport?.folder || '');
-  };
+    $('#fileExportFormat').val(settings.fileExport?.format || FormatType.default);
+};
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('save')?.addEventListener('click', saveOptions);

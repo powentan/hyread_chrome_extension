@@ -1,4 +1,3 @@
-import { File } from "buffer";
 import { ExportingType } from "domain/repo/exporting";
 
 type ReadWiseSettings = {
@@ -11,6 +10,7 @@ type AnnotationSettings = {
 
 type FileExportSettings = {
     folder? : string | null;
+    format?: string | null;
 };
 
 type ExtensionSettings = {

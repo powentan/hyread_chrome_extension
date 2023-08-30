@@ -5,6 +5,12 @@ export enum ExportingType {
     Readwise = 'readwise',
 };
 
+export enum FormatType {
+    default = 'default',
+    hyRead = 'hyread',
+    hqa = 'hq&a',
+}
+
 export interface ExportingPort {
     exportDataTo(data: string, book: Book): Promise<boolean>;
 }

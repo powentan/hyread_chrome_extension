@@ -1,7 +1,6 @@
 import { describe, test, expect } from '@jest/globals';
 import { Book } from 'domain/model/book';
 import MarkdownFormatAdapter from 'infra/adapter/markdown_format/markdown_format';
-import { AnnotationService } from 'domain/service/annotation';
 import { ExtensionSettings } from 'domain/model/settings';
 import { ExportingType } from 'domain/repo/exporting';
 
@@ -49,15 +48,15 @@ describe('test formatter service', () => {
         readwise: {
             accessToken: '',
         },
+        fileExport: {
+            folder: '',
+            format: 'default',
+        },
     };
 
     test('test markdown format', () => {
-        const annotationService = new AnnotationService(
-            book,
-            annotations,
-            new MarkdownFormatAdapter(book, annotations, settings),
-        )
-        const markdown = annotationService.toString();
+        const formatAdapter = new MarkdownFormatAdapter(book, annotations, settings);
+        const markdown = formatAdapter.toString();
 
         expect(markdown).toContain(`# ${book.title}`)
         expect(markdown).toContain(`[${book.title}](${book.cover})`)

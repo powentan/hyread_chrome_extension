@@ -6,7 +6,7 @@
     "setup": "npm install .",
     "build": "rm -rf build; npx webpack; cp -rf manifest.json build/.",
     "package": "zip -r hyread_annotate_exporter.zip build;",
-    "test": "jest --coverage --verbose"
+    "test": "jest --coverage --verbose --collectCoverageFrom='src/**/*.{ts,jxs}'"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.237",

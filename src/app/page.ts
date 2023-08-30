@@ -4,7 +4,6 @@ import ExportToReadwiseReader from "infra/adapter/exporting/export_to_readwise_r
 import MarkdownFormatAdapter from "infra/adapter/markdown_format/markdown_format";
 import { BookService } from "domain/service/book";
 import { Book } from "domain/model/book";
-import { AnnotationService } from "domain/service/annotation";
 import { ExportingService } from "domain/service/exporting";
 import { ExportingPort, ExportingType } from "domain/repo/exporting";
 import { ReadwiseReader } from "infra/adapter/readwise_reader";
@@ -19,11 +18,6 @@ async function exportToService(idNo: string, book: Book, settings: ExtensionSett
     console.log('Ready to get annotations...');
     const annotations = await bookService.getAnnotations();
     console.log(annotations);
-    const annotationService = new AnnotationService(
-        book,
-        annotations,
-        new MarkdownFormatAdapter(book, annotations, settings),
-    );
     
     let exportAdapter: ExportingPort = new ExportToFileAdapter('text/markdown', settings);
     switch(settings.exportDefault) {
@@ -38,7 +32,9 @@ async function exportToService(idNo: string, book: Book, settings: ExtensionSett
         book,
         exportAdapter,
     );
-    const annotationString = annotationService.toString();
+
+    const formatAdapter = new MarkdownFormatAdapter(book, annotations, settings);
+    const annotationString = formatAdapter.toString();
     console.log('Ready to export to the service...');
     return await exportingService.export(annotationString);
 }
