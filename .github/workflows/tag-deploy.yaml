@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is doing tag deployment
 on:
   push:
     tags:
-      - **
+      - v.**
 jobs:
   build:
     runs-on: ubuntu-latest
