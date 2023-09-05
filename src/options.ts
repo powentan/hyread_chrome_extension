@@ -6,14 +6,14 @@ import '../css/options.scss';
 
 const settingsManager = new ExtensionSettingsManager();
 const saveOptions = async () => {
-    const settings: ExtensionSettings = await settingsManager.get();
+    // const settings: ExtensionSettings = await settingsManager.get();
     const titlePrefix = $('#titlePrefix').val();
     const readwiseAccessToken = $('#readwiseAccessToken').val(); 
     const exportDefault = $('#exportDefault').val();
     const fileExportFolder = $('#fileExportFolder').val();
     const fileExportFormat = $('#fileExportFormat').val();
     const settings = {
-        ...settings,
+        // ...settings,
         exportDefault: exportDefault,
         fileExport: {
             folder: fileExportFolder,
