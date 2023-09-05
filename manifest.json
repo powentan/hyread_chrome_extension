@@ -1,7 +1,7 @@
 {
     "name": "HyRead圖書館註記匯出",
     "description": "在HyRead圖書館服務的裡面增加註記匯出功能",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "manifest_version": 3,
     "options_ui": {
         "page": "dist/options-bundle.html",
@@ -21,7 +21,8 @@
             ],
             "all_frames": true,
             "js": [
-                "dist/content-script-bundle.js"
+                "dist/content-script-bundle.js",
+                "dist/tesseract.min.js"
             ]
         }
     ],
