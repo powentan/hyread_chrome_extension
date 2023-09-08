@@ -1,6 +1,6 @@
-import { ExportingPort } from '../../../domain/repo/exporting';
-import { Book } from 'domain/model/book';
-import { ExtensionSettings } from 'domain/model/settings';
+import { ExportingPort } from '@/domain/repo/exporting';
+import { Book } from '@/domain/model/book';
+import { ExtensionSettings } from '@/domain/model/settings';
 
 function createDataUrl(content: string, mimeType: string): string {
     const base64Content = btoa(unescape(encodeURIComponent(content)));

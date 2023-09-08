@@ -4,7 +4,7 @@
     "version": "0.4.5",
     "manifest_version": 3,
     "options_ui": {
-        "page": "dist/options-bundle.html",
+        "page": "dist/options/options_vue.html",
         "open_in_tab": true
     },
     "background": {
@@ -21,8 +21,7 @@
             ],
             "all_frames": true,
             "js": [
-                "dist/content-script-bundle.js",
-                "dist/tesseract.min.js"
+                "dist/content-script-bundle.js"
             ]
         }
     ],

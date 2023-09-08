@@ -1,4 +1,4 @@
-import { ExportingType } from "domain/repo/exporting";
+import { ExportingType } from "@/domain/repo/exporting";
 
 type ReadWiseSettings = {
     accessToken?: string | null;

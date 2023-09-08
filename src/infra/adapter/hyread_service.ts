@@ -1,5 +1,5 @@
-import { HyReadServicePort } from '../../domain/repo/hyread_service';
-import { Book, isHistoricalBook, AnnotationResultItem } from '../../domain/model/book';
+import { HyReadServicePort } from '@/domain/repo/hyread_service';
+import { Book, isHistoricalBook, AnnotationResultItem } from '@/domain/model/book';
 import querystring from 'querystring';
 
 export default class HyReadServiceAdapter implements HyReadServicePort {

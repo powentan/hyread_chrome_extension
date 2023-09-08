@@ -1,4 +1,4 @@
-import { ExtensionSettings } from "domain/model/settings";
+import { ExtensionSettings } from "@/domain/model/settings";
 
 export interface SettingsPort {
     get(): Promise<ExtensionSettings>;

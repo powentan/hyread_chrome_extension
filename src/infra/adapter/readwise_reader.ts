@@ -1,4 +1,4 @@
-import { ReadwiseReaderPort } from "domain/repo/readwise_reader";
+import { ReadwiseReaderPort } from "@/domain/repo/readwise_reader";
 
 export type ReadwiseReaderCreateSchema = {
     url: string;

@@ -1,5 +1,4 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: "development",
@@ -7,13 +6,15 @@ module.exports = {
   entry: {
     "content-script": "./src/content_script.ts",
     "background": "./src/background.ts",
-    "options": "./src/options.ts"
   },
   output: {
     path: path.resolve(__dirname, './build/dist'),
     filename: "[name]-bundle.js"
   },
   resolve: {
+    alias: {
+        "@": path.resolve(__dirname, 'src'),
+    },
     modules: [
       path.resolve(__dirname, 'node_modules'),
       path.resolve(__dirname, 'src/'),
@@ -25,6 +26,13 @@ module.exports = {
       { 
         test: /\.tsx?$/,
         loader: "ts-loader"
+      },
+      {
+        test: /\.css$/,
+        use: [
+            'vue-style-loader',
+            'css-loader'
+        ]
       },
       {
         test: /\.(scss)$/,
@@ -56,11 +64,5 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-      new HtmlWebpackPlugin({
-          template: './options/options.html',
-          filename: './options-bundle.html',
-          chunks: ["options"],
-      })
-  ]
+  plugins: []
 };

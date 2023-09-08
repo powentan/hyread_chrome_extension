@@ -1,5 +1,5 @@
-import { Book } from "domain/model/book";
-import { ExportingPort } from "domain/repo/exporting";
+import { Book } from "@/domain/model/book";
+import { ExportingPort } from "@/domain/repo/exporting";
 
 export class ExportingService {
     book: Book;

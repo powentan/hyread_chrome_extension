@@ -1,13 +1,13 @@
-import HyReadServiceAdapter from "infra/adapter/hyread_service";
-import ExportToFileAdapter from "infra/adapter/exporting/export_to_file";
-import ExportToReadwiseReader from "infra/adapter/exporting/export_to_readwise_reader";
-import MarkdownFormatAdapter from "infra/adapter/markdown_format/markdown_format";
-import { BookService } from "domain/service/book";
-import { Book } from "domain/model/book";
-import { ExportingService } from "domain/service/exporting";
-import { ExportingPort, ExportingType } from "domain/repo/exporting";
-import { ReadwiseReader } from "infra/adapter/readwise_reader";
-import { ExtensionSettings } from "domain/model/settings";
+import HyReadServiceAdapter from "@/infra/adapter/hyread_service";
+import ExportToFileAdapter from "@/infra/adapter/exporting/export_to_file";
+import ExportToReadwiseReader from "@/infra/adapter/exporting/export_to_readwise_reader";
+import MarkdownFormatAdapter from "@/infra/adapter/markdown_format/markdown_format";
+import { BookService } from "@/domain/service/book";
+import { Book } from "@/domain/model/book";
+import { ExportingService } from "@/domain/service/exporting";
+import { ExportingPort, ExportingType } from "@/domain/repo/exporting";
+import { ReadwiseReader } from "@/infra/adapter/readwise_reader";
+import { ExtensionSettings } from "@/domain/model/settings";
 
 
 async function exportToService(idNo: string, book: Book, settings: ExtensionSettings): Promise<boolean> {

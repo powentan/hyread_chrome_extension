@@ -1,7 +1,7 @@
-import { Book, Annotation } from '../../../domain/model/book';
-import { AnnotationFormatPort } from 'domain/repo/annotation_format';
-import { ExtensionSettings } from 'domain/model/settings';
-import { FormatType } from 'domain/repo/exporting';
+import { Book, Annotation } from '@/domain/model/book';
+import { AnnotationFormatPort } from '@/domain/repo/annotation_format';
+import { ExtensionSettings } from '@/domain/model/settings';
+import { FormatType } from '@/domain/repo/exporting';
 
 
 export default class MarkdownFormatAdapter implements AnnotationFormatPort
