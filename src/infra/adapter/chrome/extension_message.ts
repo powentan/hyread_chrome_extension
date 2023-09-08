@@ -1,4 +1,4 @@
-import { MessagePassingPort } from "domain/repo/chrome/message_passing";
+import { MessagePassingPort } from "@/domain/repo/chrome/message_passing";
 
 export default class ExtensionMessagePassing implements MessagePassingPort {
     async sendMessage(message: object) {

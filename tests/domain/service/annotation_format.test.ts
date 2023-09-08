@@ -1,8 +1,8 @@
 import { describe, test, expect } from '@jest/globals';
-import { Book } from 'domain/model/book';
-import MarkdownFormatAdapter from 'infra/adapter/markdown_format/markdown_format';
-import { ExtensionSettings } from 'domain/model/settings';
-import { ExportingType } from 'domain/repo/exporting';
+import { Book } from '@/domain/model/book';
+import MarkdownFormatAdapter from '@/infra/adapter/markdown_format/markdown_format';
+import { ExtensionSettings } from '@/domain/model/settings';
+import { ExportingType } from '@/domain/repo/exporting';
 
 
 describe('test formatter service', () => {

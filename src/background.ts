@@ -1,5 +1,5 @@
-import ExtensionMessagePassing from "infra/adapter/chrome/extension_message";
-import { exportToService } from "app/page";
+import ExtensionMessagePassing from "@/infra/adapter/chrome/extension_message";
+import { exportToService } from "@/app/page";
 
 const messagePassing = new ExtensionMessagePassing();
 

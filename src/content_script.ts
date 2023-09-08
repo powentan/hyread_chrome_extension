@@ -1,12 +1,10 @@
-import { exportAnnotationButton, fileExportIcon } from './app/ui';
+import { exportAnnotationButton, fileExportIcon } from '@/app/ui';
 import $ from "cash-dom";
 import { Cash } from "cash-dom";
-import { Book } from './domain/model/book';
-import { exportToService } from './app/page';
-import ExtensionSettingsManager from 'infra/adapter/extension_settings';
-import { ExtensionSettings } from 'domain/model/settings';
-import { ExportingType } from 'domain/repo/exporting';
-import WebMessagePassing from 'infra/adapter/chrome/web_message';
+import { Book } from '@/domain/model/book';
+import ExtensionSettingsManager from '@/infra/adapter/extension_settings';
+import { ExtensionSettings } from '@/domain/model/settings';
+import WebMessagePassing from '@/infra/adapter/chrome/web_message';
 
 
 function parseOnlineReadingUrl(url: string): Book {

@@ -1,7 +1,5 @@
-import { HyReadServicePort } from '../repo/hyread_service';
-import { ExportingPort } from 'domain/repo/exporting';
-import { Book, Annotation, AnnotationResultItem } from '../model/book';
-import { AnnotationFormatPort } from 'domain/repo/annotation_format';
+import { HyReadServicePort } from '@/domain/repo/hyread_service';
+import { Book, Annotation, AnnotationResultItem } from '@/domain/model/book';
 
 export class BookService {
     book: Book;

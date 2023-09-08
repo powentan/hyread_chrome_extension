@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
-import { BookService } from 'domain/service/book';
-import { Book, Annotation } from 'domain/model/book';
-import HyReadServiceAdapter from 'infra/adapter/hyread_service';
+import { BookService } from '@/domain/service/book';
+import { Book, Annotation } from '@/domain/model/book';
+import HyReadServiceAdapter from '@/infra/adapter/hyread_service';
 
 jest.mock('infra/adapter/hyread_service', () => {
     return jest.fn().mockImplementation(() => {

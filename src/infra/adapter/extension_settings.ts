@@ -1,5 +1,5 @@
-import { SettingsPort } from "domain/repo/chrome/settings";
-import { ExtensionSettings } from "domain/model/settings";
+import { SettingsPort } from "@/domain/repo/chrome/settings";
+import { ExtensionSettings } from "@/domain/model/settings";
 
 export default class ExtensionSettingsManager implements SettingsPort {
     async get(): Promise<ExtensionSettings> {

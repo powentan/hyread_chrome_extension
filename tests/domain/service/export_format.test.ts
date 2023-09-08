@@ -1,11 +1,11 @@
 import { describe, test, expect } from '@jest/globals';
-import { Book } from 'domain/model/book';
-import { ExportingService } from "domain/service/exporting";
-import ExportToFileAdapter from "infra/adapter/exporting/export_to_file";
-import ExportToReadwiseReader from 'infra/adapter/exporting/export_to_readwise_reader';
-import { ReadwiseReader } from 'infra/adapter/readwise_reader';
-import { ExportingType } from 'domain/repo/exporting';
-import { ExtensionSettings } from 'domain/model/settings';
+import { Book } from '@/domain/model/book';
+import { ExportingService } from "@/domain/service/exporting";
+import ExportToFileAdapter from "@/infra/adapter/exporting/export_to_file";
+import ExportToReadwiseReader from '@/infra/adapter/exporting/export_to_readwise_reader';
+import { ReadwiseReader } from '@/infra/adapter/readwise_reader';
+import { ExportingType } from '@/domain/repo/exporting';
+import { ExtensionSettings } from '@/domain/model/settings';
 
 describe('test export format service', () => {
     const book: Book = {

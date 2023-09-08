@@ -1,8 +1,8 @@
 import showdown from 'showdown';
-import { ExportingPort } from '../../../domain/repo/exporting';
-import { Book } from 'domain/model/book';
+import { ExportingPort } from '@/domain/repo/exporting';
+import { Book } from '@/domain/model/book';
 import { ReadwiseReader, ReadwiseReaderCreateSchema } from '../readwise_reader';
-import { ExtensionSettings } from 'domain/model/settings';
+import { ExtensionSettings } from '@/domain/model/settings';
 
 export default class ExportToReadwiseReader implements ExportingPort {
     readwiseReader: ReadwiseReader;

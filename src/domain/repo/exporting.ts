@@ -1,4 +1,4 @@
-import { Book } from "domain/model/book";
+import { Book } from "@/domain/model/book";
 
 export enum ExportingType {
     File = 'file',
