@@ -18,16 +18,13 @@ export class BookService {
         for(const item of results) {
             let data = JSON.parse(item.data);
             console.log(data);
-            let _notes = data.map((x: Annotation) => {
-                return {
-                    chapterTitle: x.chapterTitle,
-                    text: x.text,
-                    notes: x.notes,
-                    spineIndex: x.spineIndex,
-                };
-            });
-            console.log(_notes);
-            annotations.push(..._notes);
+            //  let _notes = data.map((x: Annotation) => {
+                //  return {
+                    //  ...x,
+                //  };
+            //  });
+            console.log(data);
+            annotations.push(...data);
         }
 
         return annotations;

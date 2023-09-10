@@ -15,3 +15,11 @@ messagePassing.onMessage(async (request: any, sender: chrome.runtime.MessageSend
     //     isOK: result,
     // });
 });
+
+chrome.runtime.onInstalled.addListener((details) => {
+    if(details.reason === chrome.runtime.OnInstalledReason.UPDATE || 
+       details.reason === chrome.runtime.OnInstalledReason.INSTALL
+    ) {
+        chrome.runtime.openOptionsPage();
+    }
+});

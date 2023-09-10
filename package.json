@@ -50,6 +50,7 @@
     "element-plus": "^2.3.12",
     "element-ui": "^2.15.14",
     "querystring": "^0.2.1",
-    "showdown": "^2.1.0"
+    "showdown": "^2.1.0",
+    "tesseract.js": "^4.1.2"
   }
 }
