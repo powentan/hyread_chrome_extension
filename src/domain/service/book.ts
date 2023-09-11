@@ -1,5 +1,5 @@
 import { HyReadServicePort } from '@/domain/repo/hyread_service';
-import { Book, Annotation, AnnotationResultItem } from '@/domain/model/book';
+import { Book, Annotation, AnnotationResultItem, BookStatus } from '@/domain/model/book';
 
 export class BookService {
     book: Book;
@@ -18,11 +18,6 @@ export class BookService {
         for(const item of results) {
             let data = JSON.parse(item.data);
             console.log(data);
-            //  let _notes = data.map((x: Annotation) => {
-                //  return {
-                    //  ...x,
-                //  };
-            //  });
             console.log(data);
             annotations.push(...data);
         }
@@ -37,5 +32,12 @@ export class BookService {
         let annotations = this._parseAnnotationResult(results);
         console.log(annotations);
         return annotations;
+    }
+
+    async getReadingProgress(): Promise<BookStatus | null> {
+        let result = null;
+        result = await this.hyreadService.getReadingProgress(this.book);
+        console.log(result);
+        return result;
     }
 }

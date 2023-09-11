@@ -1,48 +1,11 @@
 import { exportAnnotationButton, fileExportIcon } from '@/app/ui';
 import $ from "cash-dom";
-import { Cash } from "cash-dom";
 import { Book } from '@/domain/model/book';
 import ExtensionSettingsManager from '@/infra/adapter/extension_settings';
 import { ExtensionSettings } from '@/domain/model/settings';
 import WebMessagePassing from '@/infra/adapter/chrome/web_message';
+import { HyReadPageService } from '@/domain/service/hyread_page';
 
-
-function parseOnlineReadingUrl(url: string): Book {
-    let search = new URL(url, window.location.origin).searchParams;
-    const brn = search.get('brn');
-
-    if(brn) {
-        return {
-            brn: brn,
-        }
-    } else {
-        return {
-            assetUUID: search.get('asstuuid'),
-            eid: search.get('eid'),
-            ownerCode: search.get('owner_code'),
-        }
-    }
-}
-
-function parseBookInfo($toolbarblock: Cash, $inforList: Cash): Book {
-    let title = $inforList.find('h3.title').text();
-    let coverElem = $inforList.find('.cover img')[0];
-    let cover = '';
-    if(coverElem) {
-        cover = $(coverElem).attr('src')?? '';
-    }
-
-    console.log($toolbarblock);
-    let href = $toolbarblock.find('.toolbar:first-child a').attr('href');
-    console.log(`href=${href}`);
-    let book = parseOnlineReadingUrl(href?? '');
-    // add more info for the book
-    book.title = title;
-    book.cover = cover;
-    console.log(book);
-
-    return book;
-}
 
 async function sendExportMesssage(settings: ExtensionSettings, payload: any, webMessagePassing: WebMessagePassing) {
     const message = {
@@ -61,9 +24,15 @@ async function init() {
     console.log('init content script')
     const idNo = $('[name="readerCode"]').val() as string;
 
+    const hyreadPageService = new HyReadPageService(idNo);
+
+    const books = hyreadPageService.getBooks();
+
+    for(const book of books) {
+        console.log(book);
+    }
     // append dialog UI
     //  $('.main_content').append($(exportDialog));
-
     // inject for bookcase and historical
     $.each($('.infor-list .toolbarblock .toolbar:last-child'), (index, elem) => {
         const firstItemText = $($('.infor-list .toolbarblock .toolbar:first-child')[index]).text().trim();
@@ -78,7 +47,7 @@ async function init() {
                 // toolbarblock
                 let $toolbarblock = $(e.currentTarget).parent();
                 let $inforList = $toolbarblock.parent();
-                const book = parseBookInfo($toolbarblock, $inforList)
+                const book = hyreadPageService.getBookInfo($inforList);
 
                 // wait for complete
                 webMessagePassing.onMessage((request) => {

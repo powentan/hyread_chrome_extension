@@ -16,10 +16,19 @@ messagePassing.onMessage(async (request: any, sender: chrome.runtime.MessageSend
     // });
 });
 
+// open options page during updating and installation
 chrome.runtime.onInstalled.addListener((details) => {
-    if(details.reason === chrome.runtime.OnInstalledReason.UPDATE || 
+    if(details.reason === chrome.runtime.OnInstalledReason.UPDATE ||
        details.reason === chrome.runtime.OnInstalledReason.INSTALL
     ) {
         chrome.runtime.openOptionsPage();
     }
 });
+
+chrome.tabs.query({url: 'https://*.hyread.com.tw/*'}, (res) => {
+    for(const tab of res) {
+        if(tab.id != null) {
+            chrome.tabs.reload(tab.id);
+        }
+    }
+})

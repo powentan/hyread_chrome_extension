@@ -4,15 +4,27 @@ type BookcaseBook = {
     ownerCode?: string | null;
     title?: string | null;
     cover?: string | null;
+    status?: BookStatus | null;
 };
 
 type HistoricalBook = {
     brn: string | null;
     title?: string | null;
     cover?: string | null;
+    status?: BookStatus | null;
 };
 
 type Book = BookcaseBook | HistoricalBook;
+
+type BookStatus = {
+    assetUUID: string | null;
+    syncTime: number | null;
+    udpateTime?: number | null;
+    os: string;
+    platform: string;
+    position: number;
+    progress?: number | null;
+};
 
 type Annotation = {
     chapterTitle: string;
@@ -63,4 +75,5 @@ export {
     AnnotationResultItem,
     AnnotationColor,
     getAnnotationFontColor,
+    BookStatus,
 };
