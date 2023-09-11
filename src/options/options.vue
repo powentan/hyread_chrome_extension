@@ -71,29 +71,20 @@
 
         <!-- <el-tab-pane label="匯出格式" name="export_format">
         </el-tab-pane> -->
-
       </el-tabs>
     </el-main>
     <el-footer>
       <el-button type="primary" @click="handleSaveSettings">儲存設定</el-button>
     </el-footer>
-
-    <el-dialog
+    <WhatsNew
+      title="最新更新的內容"
       v-model="showWhatsNew"
-      title="Tips"
-      width="30%"
+      @close-dialog="showWhatsNew = false; settings.version = ''"
     >
-      <span>This is a message</span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="showWhatsNew= false">關閉</el-button>
-          <el-button type="primary" @click="showWhatsNew = false">
-            知道了
-          </el-button>
-        </span>
+      <template #body>
+        Hi hi
       </template>
-    </el-dialog>
-
+    </WhatsNew>
   </el-container>
 </template>
 <script lang="ts" setup>
@@ -104,6 +95,7 @@ import { ExtensionSettings, defaultExtensionSettings } from '@/domain/model/sett
 import { ExportingType, FormatType } from '@/domain/repo/exporting';
 import ExtensionSettingsManager from "@/infra/adapter/extension_settings";
 import { AnnotationColor } from '@/domain/model/settings';
+import WhatsNew from '@/components/WhatsNew.vue';
 
 let settings: ExtensionSettings = reactive(defaultExtensionSettings);
 let showWhatsNew = ref(false);
@@ -177,8 +169,12 @@ onBeforeMount(async () => {
 
   const version = chrome.runtime.getManifest().version;
   // show what's new page if it is a new version
-  // showWhatsNew = ref(_settings.version !== version);
-  showWhatsNew.value = true;
+  console.log(`_settings.version=${_settings.version}, version=${version}`);
+  showWhatsNew.value = (_settings.version !== version);
+
+  settingsManager.set({
+    version: version,
+  }, () => {});
 });
 </script>
 <style>
