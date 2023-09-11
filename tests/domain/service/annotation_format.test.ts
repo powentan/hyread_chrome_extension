@@ -1,8 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { Book } from '@/domain/model/book';
 import MarkdownFormatAdapter from '@/infra/adapter/markdown_format/markdown_format';
-import { ExtensionSettings } from '@/domain/model/settings';
-import { ExportingType } from '@/domain/repo/exporting';
+import { settings } from './common';
 
 
 describe('test formatter service', () => {
@@ -52,19 +51,7 @@ describe('test formatter service', () => {
             style: 'normal',
         },
     ];
-    const settings: ExtensionSettings = {
-        exportDefault: ExportingType.File,
-        annotation: {
-            titlePrefix: '',
-        },
-        readwise: {
-            accessToken: '',
-        },
-        fileExport: {
-            folder: '',
-            format: 'default',
-        },
-    };
+
 
     test('test markdown format', () => {
         const formatAdapter = new MarkdownFormatAdapter(book, annotations, settings);
@@ -77,7 +64,7 @@ describe('test formatter service', () => {
 
         for(const annotation of annotations) {
             expect(markdown).toContain(`> ${annotation.text}`)
-            expect(markdown).toContain(`> 心得筆記: ${annotation.notes}`)
+            expect(markdown).toContain(`${annotation.notes}`)
         }
     });
 });

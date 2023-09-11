@@ -70,7 +70,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
             for(let annotation of annotations.reverse()) {
                 markdown += `> ${annotation.text}\n`
                 if(annotation.notes != null) {
-                    markdown += `> 心得筆記: ${annotation.notes}\n`
+                    markdown += `${annotation.notes}\n`
                 }
                 markdown += '\n';
             }
@@ -94,7 +94,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 // highlight
                 markdown += `> ${annotation.text}\n`
                 if(annotation.notes != null) {
-                    markdown += `> 心得筆記: ${annotation.notes}\n`
+                    markdown += `${annotation.notes}\n`
                 }
                 markdown += '\n---\n';
                 i++;
