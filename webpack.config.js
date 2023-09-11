@@ -20,6 +20,7 @@ module.exports = {
       path.resolve(__dirname, 'src/'),
     ],
     extensions: [".ts", ".tsx", ".js"],
+    expect: "",
   },
   module: {
     rules: [

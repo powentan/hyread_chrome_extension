@@ -6,6 +6,7 @@ import ExportToReadwiseReader from '@/infra/adapter/exporting/export_to_readwise
 import { ReadwiseReader } from '@/infra/adapter/readwise_reader';
 import { ExportingType } from '@/domain/repo/exporting';
 import { ExtensionSettings } from '@/domain/model/settings';
+import { settings } from './common';
 
 describe('test export format service', () => {
     const book: Book = {
@@ -14,15 +15,6 @@ describe('test export format service', () => {
         ownerCode: 'owner_code',
         title: 'book title',
         cover: 'https://book-cover',
-    };
-    const settings: ExtensionSettings = {
-        exportDefault: ExportingType.File,
-        annotation: {
-            titlePrefix: '',
-        },
-        readwise: {
-            accessToken: '',
-        },
     };
 
     test('test export service: file type', () => {
