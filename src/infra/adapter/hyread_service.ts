@@ -1,5 +1,5 @@
 import { HyReadServicePort } from '@/domain/repo/hyread_service';
-import { Book, isHistoricalBook, AnnotationResultItem } from '@/domain/model/book';
+import { Book, isHistoricalBook, AnnotationResultItem, BookStatus } from '@/domain/model/book';
 import querystring from 'querystring';
 
 export default class HyReadServiceAdapter implements HyReadServicePort {
@@ -10,6 +10,14 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
 
     constructor(idNo: string) {
         this.idNo = idNo;
+    }
+
+    _headers() {
+        return {
+            'HyDS-Application-Id': this.appId,
+            'HyDS-REST-API-Key': this.apiKey,
+            'accept': 'json',
+        };
     }
 
     async getAnnotation(book: Book): Promise<Array<AnnotationResultItem>> {
@@ -39,11 +47,7 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
         });
         const res = await fetch(`${this.apiPath}/epubAnnotation?${queryString}`, {
             method: 'GET',
-            headers: {
-                'HyDS-Application-Id': this.appId,
-                'HyDS-REST-API-Key': this.apiKey,
-                'accept': 'json',
-            },
+            headers: this._headers(), 
         })
 
 
@@ -52,6 +56,44 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
             return body.results;
         } else {
             return [];
+        }
+    }
+
+    async getReadingProgress(book: Book): Promise<BookStatus | null> {
+        let commonQuery = {
+            syncTime: {
+                '$gt': 0
+            },
+        }
+        let query = {};
+        if(isHistoricalBook(book)) {
+            query = {
+                ...commonQuery,
+                domainId: {
+                    '$regex': `${this.idNo.toLowerCase()}$`
+                },
+                brn: book.brn,
+            };
+        } else {
+            query = {
+                ...commonQuery,
+                domainId: `${book.ownerCode}-${this.idNo.toLowerCase()}`,
+                assetUUID: book.assetUUID,
+            };
+        }
+
+        const queryString = querystring.stringify({
+            where: JSON.stringify(query),
+        });
+        const res = await fetch(`${this.apiPath}/epubReadingProgress?${queryString}`, {
+            method: 'GET',
+            headers: this._headers(), 
+        })
+        if(res.status === 200) {
+            const body = await res.json();
+            return body.results[0];
+        } else {
+            return null;
         }
     }
 }

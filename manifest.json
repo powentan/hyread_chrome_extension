@@ -27,6 +27,7 @@
     ],
     "permissions": [
         "storage",
-        "downloads"
+        "downloads",
+        "tabs"
     ]
 }
