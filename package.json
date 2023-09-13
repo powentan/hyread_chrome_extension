@@ -51,6 +51,7 @@
     "element-plus": "^2.3.12",
     "element-ui": "^2.15.14",
     "markdown-it": "^13.0.1",
+    "markdown-it-highlightjs": "^4.0.1",
     "querystring": "^0.2.1",
     "showdown": "^2.1.0",
     "tesseract.js": "^4.1.2"
