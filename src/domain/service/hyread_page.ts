@@ -52,9 +52,14 @@ export class HyReadPageService implements HyReadPage {
         const $inforLists = $('.infor-list')
 
         let res = [];
+        let m = new Map();
         for(const inforList of $inforLists) {
             const book = this.getBookInfo($(inforList));
-            res.push(book);
+            const title = book.title || '';
+            if(!m.get(title)) {
+                m.set(title, true);
+                res.push(book);
+            }
         }
 
         return res;

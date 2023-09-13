@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header><h1>HyRead圖書匯出設定頁面</h1></el-header>
+    <el-header><h1>HyRead圖書匯出設定</h1></el-header>
     <el-main>
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="匯出設定" name="exportingConfig">
@@ -77,14 +77,11 @@
       <el-button type="primary" @click="handleSaveSettings">儲存設定</el-button>
     </el-footer>
     <WhatsNew
-      title="最新更新的內容"
+      title="有什麼新的東西"
       v-model="showWhatsNew"
-      @close-dialog="showWhatsNew = false; settings.version = ''"
-    >
-      <template #body>
-        Hi hi
-      </template>
-    </WhatsNew>
+      @close-dialog="showWhatsNew = false;"
+      @disable-whats-new="handleDisableWhatsNew"
+    />
   </el-container>
 </template>
 <script lang="ts" setup>
@@ -96,6 +93,9 @@ import { ExportingType, FormatType } from '@/domain/repo/exporting';
 import ExtensionSettingsManager from "@/infra/adapter/extension_settings";
 import { AnnotationColor } from '@/domain/model/settings';
 import WhatsNew from '@/components/WhatsNew.vue';
+import WebMessagePassing from '@/infra/adapter/chrome/web_message';
+import WebMessagingService from '@/domain/service/web_message';
+import { BackgroundCommand } from "@/domain/model/command";
 
 let settings: ExtensionSettings = reactive(defaultExtensionSettings);
 let showWhatsNew = ref(false);
@@ -125,7 +125,7 @@ const fileExportFormats = [
       value: FormatType.hqa,
     },
     {
-      label: '畫線顏色',
+      label: '定義顏色標題',
       value: FormatType.color,
     },
 ];
@@ -151,15 +151,27 @@ function handleClick(tab: TabsPaneContext, event: Event) {
 }
 
 function handleSaveSettings(event: Event) {
+
+  const webMessagePassing = new WebMessagePassing();
+  const webMessaingService = new WebMessagingService(webMessagePassing);
   console.log(event);
   console.log(settings);
 
-  settingsManager.set(settings, () => {
+  settingsManager.set(settings, async () => {
     ElNotification.success({
       title: '設定儲存成功',
       position: 'top-left',
     });
+    await webMessaingService.sendToBackground(BackgroundCommand.reloadPages);
   });
+}
+
+function handleDisableWhatsNew() {
+  const version = chrome.runtime.getManifest().version;
+
+  settingsManager.set({
+    version: version,
+  }, () => {});
 }
 
 onBeforeMount(async () => {
@@ -171,10 +183,6 @@ onBeforeMount(async () => {
   // show what's new page if it is a new version
   console.log(`_settings.version=${_settings.version}, version=${version}`);
   showWhatsNew.value = (_settings.version !== version);
-
-  settingsManager.set({
-    version: version,
-  }, () => {});
 });
 </script>
 <style>

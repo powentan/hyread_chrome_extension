@@ -16,6 +16,7 @@
     "@rollup/plugin-alias": "^5.0.0",
     "@types/chrome": "^0.0.237",
     "@types/jest": "^29.5.1",
+    "@types/markdown-it": "^13.0.1",
     "@types/node": "^20.2.1",
     "@types/showdown": "^2.0.1",
     "@vitejs/plugin-vue": "^4.3.4",
@@ -49,6 +50,7 @@
     "cash-dom": "^8.1.5",
     "element-plus": "^2.3.12",
     "element-ui": "^2.15.14",
+    "markdown-it": "^13.0.1",
     "querystring": "^0.2.1",
     "showdown": "^2.1.0",
     "tesseract.js": "^4.1.2"

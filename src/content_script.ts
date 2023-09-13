@@ -1,36 +1,21 @@
 import { exportAnnotationButton, fileExportIcon } from '@/app/ui';
 import $ from "cash-dom";
 import { Book } from '@/domain/model/book';
-import ExtensionSettingsManager from '@/infra/adapter/extension_settings';
-import { ExtensionSettings } from '@/domain/model/settings';
 import WebMessagePassing from '@/infra/adapter/chrome/web_message';
 import { HyReadPageService } from '@/domain/service/hyread_page';
+import HyReadServiceAdapter from './infra/adapter/hyread_service';
+import WebMessagingService from './domain/service/web_message';
+import { BackgroundCommand } from './domain/model/command';
 
-
-async function sendExportMesssage(settings: ExtensionSettings, payload: any, webMessagePassing: WebMessagePassing) {
-    const message = {
-        payload,
-        settings,
-    };
-    await webMessagePassing.sendMessage({
-        payload,
-        settings,
-    });
-}
 
 const webMessagePassing = new WebMessagePassing();
+const webMessaingService = new WebMessagingService(webMessagePassing);
 
 async function init() {
     console.log('init content script')
     const idNo = $('[name="readerCode"]').val() as string;
 
     const hyreadPageService = new HyReadPageService(idNo);
-
-    const books = hyreadPageService.getBooks();
-
-    for(const book of books) {
-        console.log(book);
-    }
     // append dialog UI
     //  $('.main_content').append($(exportDialog));
     // inject for bookcase and historical
@@ -40,24 +25,20 @@ async function init() {
             const $exportButton = $(exportAnnotationButton).clone();
             $(elem).after($exportButton);
             $(elem).next().on('click', async e => {
-                const settings = await settingsManager.get();
                 $(e.target).addClass('disabled');
-                console.log(idNo);
-                console.log(e.currentTarget);
                 // toolbarblock
                 let $toolbarblock = $(e.currentTarget).parent();
                 let $inforList = $toolbarblock.parent();
                 const book = hyreadPageService.getBookInfo($inforList);
 
-                // wait for complete
-                webMessagePassing.onMessage((request) => {
+                webMessaingService.onMessageFromBackground((request) => {
                     const { isOk } = request;
                     $(e.target).removeClass('disabled');
                 });
-                await sendExportMesssage(settings, {
+                await webMessaingService.sendToBackground(BackgroundCommand.exporting, {
                     idNo,
                     book,
-                }, webMessagePassing);
+                });
             });
         }
     });
@@ -71,7 +52,6 @@ async function init() {
                 .clone().addClass('export').attr('aria-label', '匯出')
                 .html(fileExportIcon)
                 .on('click', async e => {
-                    const settings = await settingsManager.get();
                     $(e.currentTarget).css('display', 'none');
 
                     let $menu = $('[aria-label="目次"]');
@@ -93,14 +73,14 @@ async function init() {
                         title,
                     };
 
-                    webMessagePassing.onMessage((request) => {
+                    webMessaingService.onMessageFromBackground((request) => {
                         const { isOk } = request;
                         $(e.currentTarget).css('display', 'inherit');
                     });
-                    await sendExportMesssage(settings, {
+                    await webMessaingService.sendToBackground(BackgroundCommand.exporting, {
                         idNo,
                         book,
-                    }, webMessagePassing);
+                    });
                 });
             if($export.length !== 0) {
                 clearInterval(intervalId);
@@ -111,9 +91,30 @@ async function init() {
             timeout += 1;
         }, 1000);
     }
+
+    // get books info
+    const books = hyreadPageService.getBooks();
+    const hyreadService = new HyReadServiceAdapter(idNo);
+
+    for(const book of books) {
+        (async function() {
+            const bookStatus = await hyreadService.getReadingProgress(book);
+            console.log(`bookStatus=${JSON.stringify(bookStatus)}`);
+            book.status = bookStatus;
+            console.log(book);
+            console.log(JSON.stringify(book).length);
+            // append reading progress info
+            let progress = '-';
+            if(bookStatus != null) {
+                progress = Math.floor((bookStatus?.progress || 0) * 100) + '%';
+            }
+            $(`.infor-list img[src*="${book.cover}"]`).parents('.cover').parent().next().append(
+                `<div class="reading-progress" style="font-weight: bold; color: navy">閱讀進度：${progress}</div>`
+            );
+        })();
+    }
 }
 
-const settingsManager = new ExtensionSettingsManager();
 $(document).ready(async function() {
     init();
 });
