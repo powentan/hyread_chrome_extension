@@ -1,5 +1,6 @@
 import { ExtensionSettings } from '@/domain/model/settings';
 import { ExportingType } from '@/domain/repo/exporting';
+import { FormatType } from '@/domain/repo/exporting';
 
 export const settings: ExtensionSettings = {
     exportDefault: ExportingType.File,
@@ -11,7 +12,7 @@ export const settings: ExtensionSettings = {
     },
     fileExport: {
         folder: '',
-        format: 'default',
+        format: FormatType.default,
         colorMap: {
             color1: '',
             color2: '',

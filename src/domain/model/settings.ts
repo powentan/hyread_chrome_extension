@@ -17,7 +17,7 @@ type AnnotationColor = {
 
 type FileExportSettings = {
     folder: string;
-    format: string;
+    format: FormatType;
     colorMap: AnnotationColor;
 };
 

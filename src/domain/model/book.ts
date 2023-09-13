@@ -17,7 +17,6 @@ type HistoricalBook = {
 type Book = BookcaseBook | HistoricalBook;
 
 type BookStatus = {
-    assetUUID: string | null;
     syncTime: number | null;
     udpateTime?: number | null;
     os: string;
@@ -48,6 +47,12 @@ enum AnnotationFontColor {
     color3 = 'gold',
 }
 
+enum AnnotationStyle {
+    normal = 'normal',
+    dashline = 'dashline',
+    underline = 'underline',
+}
+
 type AnnotationResultItem = {
     data: string;
 };
@@ -74,6 +79,7 @@ export {
     Annotation,
     AnnotationResultItem,
     AnnotationColor,
+    AnnotationStyle,
     getAnnotationFontColor,
     BookStatus,
 };

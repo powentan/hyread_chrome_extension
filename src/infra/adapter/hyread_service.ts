@@ -61,6 +61,9 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
 
     async getReadingProgress(book: Book): Promise<BookStatus | null> {
         let commonQuery = {
+            domainId: {
+                '$regex': `${this.idNo.toLowerCase()}$`
+            },
             syncTime: {
                 '$gt': 0
             },
@@ -69,16 +72,12 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
         if(isHistoricalBook(book)) {
             query = {
                 ...commonQuery,
-                domainId: {
-                    '$regex': `${this.idNo.toLowerCase()}$`
-                },
                 brn: book.brn,
             };
         } else {
             query = {
                 ...commonQuery,
-                domainId: `${book.ownerCode}-${this.idNo.toLowerCase()}`,
-                assetUUID: book.assetUUID,
+                brn: book.eid,
             };
         }
 
@@ -91,7 +90,10 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
         })
         if(res.status === 200) {
             const body = await res.json();
-            return body.results[0];
+            let results = body.results;
+            // sort in descending order
+            results.sort((a: BookStatus, b: BookStatus) => (b.progress || 0) - (a.progress || 0));
+            return body.results[0] as BookStatus;
         } else {
             return null;
         }
