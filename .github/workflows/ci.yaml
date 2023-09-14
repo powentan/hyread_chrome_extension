@@ -1,5 +1,5 @@
 name: CI file
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} is running CI
 on:
   push:
     branches:
