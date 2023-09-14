@@ -38,7 +38,7 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
         } else {
             query = {
                 ...commonQuery,
-                assetUUID: book.assetUUID,
+                brn: book.eid,
             };
         }
 

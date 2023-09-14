@@ -3,7 +3,7 @@
       :model-value="isShow"
       :title="title"
       width="35%"
-      top="10vh"
+      top="5vh"
     >
         <div v-html="whatsNewContent"></div>
         <template #footer>
@@ -22,7 +22,7 @@ defineProps(['title', 'isShow']);
 const emit = defineEmits(['close-dialog', 'disable-whats-new']);
 import MarkdownIt from "markdown-it";
 import MarkdownItHighlightjs from "markdown-it-highlightjs";
-import contentBody from "@/options/whatsNew/0_5_0";
+import contentBody from "@/options/whatsNew/0_5_1";
 
 const markdown = new MarkdownIt({
     html: true,

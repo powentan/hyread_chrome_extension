@@ -94,20 +94,26 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                     continue;
                 }
                 // question
-                if(annotation.style === AnnotationStyle.dashline) {
-                    markdown += `### ${annotation.text}\n`;
-                    markdown += `A:\n\n`;
-                } else {
-                    markdown += `### Q${i}\n`;
-                    markdown += `A:\n\n`;
+                switch(annotation.style) {
+                    case AnnotationStyle.dashline:
+                        markdown += `### ${annotation.text}\n`;
+                        markdown += `A:\n\n`;
+                        if(annotation.notes != null) {
+                            markdown += `${annotation.notes}\n`
+                        }
+                        break;
+                    case AnnotationStyle.normal:
+                        if(annotation.notes != null) {
+                            const q = annotation.notes.replace('\n', '');
+                            markdown += `### ${q}\n`
+                        } else {
+                            markdown += `### Q${i}\n`;
+                        }
+                        markdown += `A:\n\n`;
+                        markdown += `> ${annotation.text}\n`
+                        break;
                 }
                 // highlight
-                if(annotation.style === AnnotationStyle.normal) {
-                    markdown += `> ${annotation.text}\n`
-                }
-                if(annotation.notes != null) {
-                    markdown += `${annotation.notes}\n`
-                }
                 markdown += '\n---\n';
                 i++;
             }
@@ -117,11 +123,12 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
             markdown += `## 引用\n`;
         }
         for(const quote of quotes) {
-            markdown += `> ${quote.text}`;
+            markdown += `> ${quote.text}\n`;
 
             if(quote.notes != null) {
                 markdown += `${quote.notes}\n`
             }
+            markdown += '\n';
         }
 
         return markdown;
