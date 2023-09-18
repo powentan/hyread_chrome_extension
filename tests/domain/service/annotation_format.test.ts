@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { Book } from '@/domain/model/book';
 import MarkdownFormatAdapter from '@/infra/adapter/markdown_format/markdown_format';
-import { settings } from './common';
+import { settings, annotations } from './common';
 
 
 describe('test formatter service', () => {
@@ -12,46 +12,6 @@ describe('test formatter service', () => {
         title: 'book title',
         cover: 'https://book-cover',
     };
-
-    const annotations = [
-        {
-            chapterTitle: 'chapter title 1',
-            text: 'annotation text',
-            notes: 'notes text',
-            spineIndex: 2,
-            cfi: '...',
-            color: 'annotation-color-1',
-            style: 'normal',
-        },
-        {
-            chapterTitle: 'chapter title 1',
-            text: 'annotation text 2',
-            notes: 'notes text 2',
-            spineIndex: 2,
-            cfi: '...',
-            color: 'annotation-color-1',
-            style: 'normal',
-        },
-        {
-            chapterTitle: 'chapter title 2',
-            text: 'annotation text',
-            notes: 'notes text',
-            spineIndex: 1,
-            cfi: '...',
-            color: 'annotation-color-1',
-            style: 'normal',
-        },
-        {
-            chapterTitle: 'chapter title 2',
-            text: 'annotation text 2',
-            notes: 'notes text',
-            spineIndex: 1,
-            cfi: '...',
-            color: 'annotation-color-1',
-            style: 'normal',
-        },
-    ];
-
 
     test('test markdown format', () => {
         const formatAdapter = new MarkdownFormatAdapter(book, annotations, settings);

@@ -6,17 +6,9 @@ import ExportToReadwiseReader from '@/infra/adapter/exporting/export_to_readwise
 import { ReadwiseReader } from '@/infra/adapter/readwise_reader';
 import { ExportingType } from '@/domain/repo/exporting';
 import { ExtensionSettings } from '@/domain/model/settings';
-import { settings } from './common';
+import { settings, book } from './common';
 
 describe('test export format service', () => {
-    const book: Book = {
-        assetUUID: 'asset_uuid',
-        eid: 'eid',
-        ownerCode: 'owner_code',
-        title: 'book title',
-        cover: 'https://book-cover',
-    };
-
     test('test export service: file type', () => {
         const exportToFileAdapter = new ExportToFileAdapter('text/markdown', settings);
         const mockExportToFile = jest

@@ -48,9 +48,7 @@ export class HyReadPageService implements HyReadPage {
         return book;
     }
 
-    getBooks(): Array<Book> {
-        const $inforLists = $('.infor-list')
-
+    getBooks($inforLists: Cash): Array<Book> {
         let res = [];
         let m = new Map();
         for(const inforList of $inforLists) {
