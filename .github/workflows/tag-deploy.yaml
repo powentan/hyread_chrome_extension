@@ -24,5 +24,4 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: hyread_chrome_ext.zip
-          path: ${{ github.workspace }}
+          path: hyread_chrome_ext.zip
