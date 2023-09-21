@@ -9,7 +9,7 @@
     "setup": "npm install --legacy-peer-deps",
     "build": "npm run clean; vue-tsc --noEmit; vite build; npx webpack; npm run post-build",
     "post-build": "cp -rf manifest.json build/.; cp -rf build/dist/options/* build/dist/.",
-    "package": "zip -r hyread_annotate_exporter.zip build;",
+    "package": "zip -r hyread_chrome_ext.zip build",
     "test": "jest --coverage --verbose"
   },
   "devDependencies": {

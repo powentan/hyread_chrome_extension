@@ -89,6 +89,7 @@ function injectOnlineReading() {
                 let $menu = $('[aria-label="目次"]');
                 let search = new URL(window.location.href).searchParams;
                 const assetUUID = search.get('asset_id');
+                const eid = search.get('eid');
                 const idNo = search.get('userId') || '';
                 // show menu
                 $menu.trigger('click');
@@ -101,6 +102,7 @@ function injectOnlineReading() {
 
                 const book: Book = {
                     assetUUID,
+                    eid,
                     cover,
                     title,
                 };
