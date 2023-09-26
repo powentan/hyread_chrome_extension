@@ -21,7 +21,12 @@
             ],
             "all_frames": true,
             "js": [
-                "dist/content-script-bundle.js"
+                "dist/content-script-bundle.js",
+                "dist/document-register-element.js",
+                "dist/pure-dialog.min.js"
+            ],
+            "css": [
+                "dist/pure-dialog.min.css"
             ]
         }
     ],

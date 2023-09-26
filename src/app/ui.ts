@@ -15,20 +15,26 @@ const fileExportIcon = `
 </svg>
 `;
 
-const exportDialog = `
-    <dialog id="exporting-dialog" style="padding: 10px">
-        <div style="font-size: 20px; margin: 10px;">匯出筆記</div>
-        <div class="toolbar">
-            <a class="btn btn-default btn-blue" id="export-to-file">
-                <i class="icon icon-cloud-download"></i>
-                到檔案
-            </a>
-            <a class="btn btn-default btn-blue" id="export-to-readwise">
-                <i class="icon icon-cloud-download"></i>
-                到Readwise Reader
-            </a>
-        </div>
-    </dialog>
-`;
+class AlertDialog {
+    dialog: any;
+    id: string = 'alert-dialog';
 
-export { exportAnnotationButton, fileExportIcon, exportDialog };
+    constructor() {
+        this.dialog = document.createElement('pure-dialog');
+        this.dialog.id = this.id;
+        this.dialog.buttons = '確定';
+        this.dialog.autoClose = true;
+        this.dialog.appendToDOM();
+    }
+
+    showModal(title: string) {
+        this.dialog.title = title;
+        this.dialog.showModal();
+    }
+
+    close() {
+        this.dialog.close();
+    }
+}
+
+export { exportAnnotationButton, fileExportIcon, AlertDialog };

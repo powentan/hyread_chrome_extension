@@ -33,13 +33,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        "content-script": "@/content_script.ts",
-        "background": "@/background.ts",
+        //  "content-script": "@/content_script.ts",
+        // "background": "@/background.ts",
         "options-vue": "@/options_vue.ts",
       },
       output: {
         dir: './build/dist',
         format: 'es',
+        //  format: 'iife',
         entryFileNames: '[name]-bundle.js',
         compact: true,
       }

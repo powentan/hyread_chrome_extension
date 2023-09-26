@@ -7,6 +7,7 @@ import HyReadServiceAdapter from './infra/adapter/hyread_service';
 import WebMessagingService from './domain/service/web_message';
 import { BackgroundCommand } from './domain/model/command';
 import { HyReadLibraryCaptcha } from './utils/ocr';
+import { AlertDialog } from '@/app/ui';
 
 
 const webMessagePassing = new WebMessagePassing();
@@ -127,11 +128,13 @@ function injectOnlineReading() {
 
 }
 
+let alertDialog = null;
 async function init() {
     console.log('init content script')
 
     // append dialog UI
-    //  $('.main_content').append($(exportDialog));
+    // alertDialog = new AlertDialog();
+    // alertDialog.showModal('密碼錯誤');
     const pathname = window.location.pathname;
     // 我的書櫃和借閱歷史頁面
     if(
