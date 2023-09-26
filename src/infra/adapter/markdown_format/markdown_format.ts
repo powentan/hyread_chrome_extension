@@ -20,10 +20,10 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         let mergedNotes: Record<string, Array<Annotation>> = {};
 
         for(let annotation of annotations) {
-            let title = annotation.chapterTitle;
+            let title = annotation.chapterTitle.replace(/\s/g, '');
             let noteInfo = {
                 ...annotation,
-                title,
+                chapterTitle: title,
             };
             if(title in mergedNotes) {
                 mergedNotes[title].push(noteInfo);
