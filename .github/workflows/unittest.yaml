@@ -1,8 +1,22 @@
-name: Unittest workflow
+name: Prepare workflow
 on:
     workflow_call:
+        inputs:
+            commit_ref:
+                required: true
+                type: string
 jobs:
-    unittest:
+    prepare:
         runs-on: ubuntu-latest
         steps:
+            - name: checkout repo for tag ${{ inputs.commit_ref }}
+              uses: actions/checkout@v3
+              with:
+                    ref: ${{ inputs.commit_ref }}
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci --legacy-peer-deps
             - run: npm test

@@ -6,13 +6,7 @@ on:
       - 'feat/**'
       - 'bug/**'
 jobs:
-    prepare:
+    unittest:
         uses: ./.github/workflows/prepare.yaml
         with:
             commit_ref: ${{ github.ref }}
-    unittest:
-        needs: prepare
-        uses: ./.github/workflows/unittest.yaml
-    build:
-        needs: unittest
-        uses: ./.github/workflows/build.yaml 
