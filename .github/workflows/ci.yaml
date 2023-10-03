@@ -7,6 +7,6 @@ on:
       - 'bug/**'
 jobs:
     unittest:
-        uses: ./.github/workflows/prepare.yaml
+        uses: ./.github/workflows/unittest.yaml
         with:
             commit_ref: ${{ github.ref }}
