@@ -1,0 +1,7 @@
+name: tag release
+run-name: ${{ github.actor }} is doing tag release
+on:
+  push:
+    tags:
+      - v**
+jobs:
