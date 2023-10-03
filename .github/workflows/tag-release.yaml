@@ -5,3 +5,13 @@ on:
     tags:
       - v**
 jobs:
+    prepare:
+        uses: ./.github/workflows/prepare.yaml
+        with:
+            commit_ref: ${{ github.ref }}
+    unittest:
+        uses: ./.github/workflows/unittest.yaml
+    build:
+        uses: ./.github/workflows/build.ymal 
+    artifact:
+        uses: ./.github/workflows/artifact.yaml

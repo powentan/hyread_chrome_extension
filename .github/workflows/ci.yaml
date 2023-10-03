@@ -7,12 +7,10 @@ on:
       - 'bug/**'
 jobs:
     prepare:
-        uses: ./.github/workflows/reusable/prepare.yaml
+        uses: ./.github/workflows/prepare.yaml
         with:
             commit_ref: ${{ github.ref }}
     unittest:
-        uses: ./.github/workflows/reusable/unittest.yaml
+        uses: ./.github/workflows/unittest.yaml
     build:
-        uses: ./.github/workflows/reusable/build.ymal 
-    artifact:
-        uses: ./.github/workflows/reusable/artifact.yaml
+        uses: ./.github/workflows/build.ymal 
