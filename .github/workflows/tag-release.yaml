@@ -1,0 +1,16 @@
+name: tag release
+run-name: ${{ github.actor }} is doing tag release
+on:
+  push:
+    tags:
+      - v**
+jobs:
+    unittest:
+        uses: ./.github/workflows/prepare.yaml
+        with:
+            commit_ref: ${{ github.ref }}
+    build_deploy:
+        needs: unittest
+        uses: ./.github/workflows/build_deploy.yaml 
+        with:
+            commit_ref: ${{ github.ref }}
