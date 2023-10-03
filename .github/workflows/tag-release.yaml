@@ -12,6 +12,6 @@ jobs:
     unittest:
         uses: ./.github/workflows/unittest.yaml
     build:
-        uses: ./.github/workflows/build.ymal 
+        uses: ./.github/workflows/build.yaml 
     artifact:
         uses: ./.github/workflows/artifact.yaml
