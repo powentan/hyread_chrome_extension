@@ -5,6 +5,7 @@ on:
     branches:
       - 'feat/**'
       - 'bug/**'
+      - 'main'
 jobs:
     unittest:
         uses: ./.github/workflows/unittest.yaml
