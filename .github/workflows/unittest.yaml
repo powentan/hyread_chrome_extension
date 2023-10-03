@@ -1,0 +1,8 @@
+name: Unittest workflow
+on:
+    workflow_call:
+jobs:
+    unittest:
+        runs-on: ubuntu-latest
+        steps:
+            - run: npm test
