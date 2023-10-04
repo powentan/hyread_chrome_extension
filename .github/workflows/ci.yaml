@@ -5,6 +5,8 @@ on:
     branches:
       - 'feat/**'
       - 'bug/**'
+      - 'exp/**'
+      - 'chore/**'
       - 'main'
 jobs:
     unittest:
