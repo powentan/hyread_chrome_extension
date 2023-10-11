@@ -22,7 +22,7 @@ defineProps(['title', 'isShow']);
 const emit = defineEmits(['close-dialog', 'disable-whats-new']);
 import MarkdownIt from "markdown-it";
 import MarkdownItHighlightjs from "markdown-it-highlightjs";
-import contentBody from "@/options/whatsNew/0_5_1";
+import contentBody from "@/options/whatsNew/0_5_3";
 
 const markdown = new MarkdownIt({
     html: true,

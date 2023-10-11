@@ -1,6 +1,6 @@
 import { exportAnnotationButton, fileExportIcon } from '@/app/ui';
 import $ from "cash-dom";
-import { Book } from '@/domain/model/book';
+import { Book, BookSummary } from '@/domain/model/book';
 import WebMessagePassing from '@/infra/adapter/chrome/web_message';
 import { HyReadPageService } from '@/domain/service/hyread_page';
 import HyReadServiceAdapter from './infra/adapter/hyread_service';
@@ -63,14 +63,22 @@ function injectBookcaseAndHistory(idNo: string) {
             console.log(`bookStatus=${JSON.stringify(bookStatus)}`);
             book.status = bookStatus;
             console.log(book);
-            console.log(JSON.stringify(book).length);
+            const bookSummary: BookSummary = {
+                brn: book.brn,
+                title: book.title,
+                cover: book.cover,
+                progress: bookStatus?.progress,
+                platform: bookStatus?.platform,
+            };
+            console.log(bookSummary);
+            console.log(JSON.stringify(bookSummary).length);
             // append reading progress info
             let progress = '-';
             if(bookStatus != null) {
                 progress = Math.floor((bookStatus?.progress || 0) * 100) + '%';
             }
             $(`.infor-list img[src*="${book.cover}"]`).parents('.cover').parent().next().append(
-                `<div class="reading-progress" style="font-weight: bold; color: navy">閱讀進度：${progress}</div>`
+                `<div class="reading-progress" style="font-weight: bold; color: navy">閱讀進度(和掏金客活動進度無關)：${progress}</div>`
             );
         })();
     }
@@ -103,7 +111,7 @@ function injectOnlineReading() {
 
                 const book: Book = {
                     assetUUID,
-                    eid,
+                    brn: eid,
                     cover,
                     title,
                 };
