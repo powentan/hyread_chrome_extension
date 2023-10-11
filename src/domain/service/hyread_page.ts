@@ -21,7 +21,7 @@ export class HyReadPageService implements HyReadPage {
         } else {
             return {
                 assetUUID: search.get('asstuuid'),
-                eid: search.get('eid'),
+                brn: search.get('eid'),
                 ownerCode: search.get('owner_code'),
             }
         }

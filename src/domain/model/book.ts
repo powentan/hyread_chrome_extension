@@ -1,28 +1,34 @@
-type BookcaseBook = {
-    assetUUID: string | null;
-    eid?: string | null;
+type Book = {
+    brn: string | null;
+    assetUUID?: string | null;
     ownerCode?: string | null;
     title?: string | null;
     cover?: string | null;
     status?: BookStatus | null;
 };
 
-type HistoricalBook = {
+type BookStatus = {
+    syncTime: number | null;
+    udpateTime?: number | null;
+    os: string | null;
+    platform: string | null;
+    position: number | null;
+    progress?: number | null;
+};
+
+type BookMeta = {
     brn: string | null;
     title?: string | null;
     cover?: string | null;
     status?: BookStatus | null;
 };
 
-type Book = BookcaseBook | HistoricalBook;
-
-type BookStatus = {
-    syncTime: number | null;
-    udpateTime?: number | null;
-    os: string;
-    platform: string;
-    position: number;
+type BookSummary = {
+    brn: string | null;
+    title?: string | null;
+    cover?: string | null;
     progress?: number | null;
+    platform?: string| null;
 };
 
 type Annotation = {
@@ -57,10 +63,6 @@ type AnnotationResultItem = {
     data: string;
 };
 
-function isHistoricalBook(book: Book): book is HistoricalBook {
-    return 'brn' in book;
-}
-
 function getAnnotationFontColor(color: AnnotationColor): AnnotationFontColor {
     switch(color) {
         case AnnotationColor.color1:
@@ -73,13 +75,13 @@ function getAnnotationFontColor(color: AnnotationColor): AnnotationFontColor {
 }
 
 export {
-    isHistoricalBook,
     Book,
-    HistoricalBook,
     Annotation,
     AnnotationResultItem,
     AnnotationColor,
     AnnotationStyle,
     getAnnotationFontColor,
     BookStatus,
+    BookMeta,
+    BookSummary,
 };

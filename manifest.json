@@ -1,7 +1,7 @@
 {
     "name": "HyRead圖書館註記匯出",
     "description": "在HyRead圖書館服務的裡面增加註記匯出功能",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "manifest_version": 3,
     "options_ui": {
         "page": "dist/options/options_vue.html",
@@ -12,12 +12,14 @@
     },
     "host_permissions": [
         "https://readwise.io/api/v3/*",
-        "https://*.ebook.hyread.com.tw/*"
+        "https://*.ebook.hyread.com.tw/*",
+        "https://*.nlpi.edu.tw/*"
     ],
     "content_scripts": [
         {
             "matches": [
-                "https://*.ebook.hyread.com.tw/*"
+                "https://*.ebook.hyread.com.tw/*",
+                "https://*.nlpi.edu.tw/*"
             ],
             "all_frames": true,
             "js": [

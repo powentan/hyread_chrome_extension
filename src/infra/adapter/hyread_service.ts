@@ -1,5 +1,5 @@
 import { HyReadServicePort } from '@/domain/repo/hyread_service';
-import { Book, isHistoricalBook, AnnotationResultItem, BookStatus } from '@/domain/model/book';
+import { Book, AnnotationResultItem, BookStatus } from '@/domain/model/book';
 import querystring from 'querystring';
 
 export default class HyReadServiceAdapter implements HyReadServicePort {
@@ -29,18 +29,10 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
                 '$gt': 0
             },
         }
-        let query = {};
-        if(isHistoricalBook(book)) {
-            query = {
-                ...commonQuery,
-                brn: book.brn,
-            };
-        } else {
-            query = {
-                ...commonQuery,
-                brn: book.eid,
-            };
-        }
+        let query = {
+            ...commonQuery,
+            brn: book.brn,
+        };
 
         const queryString = querystring.stringify({
             where: JSON.stringify(query),
@@ -68,18 +60,10 @@ export default class HyReadServiceAdapter implements HyReadServicePort {
                 '$gt': 0
             },
         }
-        let query = {};
-        if(isHistoricalBook(book)) {
-            query = {
-                ...commonQuery,
-                brn: book.brn,
-            };
-        } else {
-            query = {
-                ...commonQuery,
-                brn: book.eid,
-            };
-        }
+        let query = {
+            ...commonQuery,
+            brn: book.brn,
+        };
 
         const queryString = querystring.stringify({
             where: JSON.stringify(query),

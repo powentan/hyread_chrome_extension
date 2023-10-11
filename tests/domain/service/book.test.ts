@@ -24,7 +24,7 @@ describe('test hyread book service', () => {
     test('getAnnotation function', async () => {
         const book: Book = {
             assetUUID: 'asset_uuid',
-            eid: 'eid',
+            brn: 'brn',
             ownerCode: 'owner_code',
             title: 'book title',
             cover: 'https://book-cover',
