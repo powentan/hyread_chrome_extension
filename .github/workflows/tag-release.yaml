@@ -6,7 +6,7 @@ on:
       - v**
 jobs:
     unittest:
-        uses: ./.github/workflows/prepare.yaml
+        uses: ./.github/workflows/unittest.yaml
         with:
             commit_ref: ${{ github.ref }}
     build_deploy:
