@@ -67,6 +67,15 @@
             </el-row>
           </template>
 
+          <template v-for="style in annotationStyles" v-if="settings.fileExport.format === 'annotation-style'">
+            <el-row>
+              <el-col :span="2">{{ style.label }}</el-col>
+              <el-col :span="6">
+                <el-input v-model="settings.fileExport.styleMap[style.key as keyof AnnotationStyleMap]" :placeholder="style.label" />
+              </el-col>
+            </el-row>
+          </template>
+
         </el-tab-pane>
 
         <!-- <el-tab-pane label="匯出格式" name="export_format">
@@ -91,7 +100,7 @@ import type { TabsPaneContext } from 'element-plus';
 import { ExtensionSettings, defaultExtensionSettings } from '@/domain/model/settings';
 import { ExportingType, FormatType } from '@/domain/repo/exporting';
 import ExtensionSettingsManager from "@/infra/adapter/extension_settings";
-import { AnnotationColor } from '@/domain/model/settings';
+import { AnnotationColor, AnnotationStyleMap } from '@/domain/model/settings';
 import WhatsNew from '@/components/WhatsNew.vue';
 import WebMessagePassing from '@/infra/adapter/chrome/web_message';
 import WebMessagingService from '@/domain/service/web_message';
@@ -128,6 +137,10 @@ const fileExportFormats = [
       label: '定義顏色標題',
       value: FormatType.color,
     },
+    {
+      label: '定義畫線風格',
+      value: FormatType.style,
+    },
 ];
 const annotationColors = [
     {
@@ -141,6 +154,21 @@ const annotationColors = [
     {
       label: '顏色3(黃色)',
       key: 'color3',
+    },
+];
+
+const annotationStyles = [
+    {
+      label: '正常畫線',
+      key: 'normal',
+    },
+    {
+      label: '虛線畫線',
+      key: 'dashline',
+    },
+    {
+      label: '底線畫線',
+      key: 'underline',
     },
 ];
 
