@@ -62,8 +62,40 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         return res;
     }
 
+    _mergeAnnotationByStyle(annotations: Array<Annotation>): Array<Array<Annotation>> {
+        let mergedNotes: Record<string, Array<Annotation>> = {};
+
+        for(let annotation of annotations) {
+            let style = annotation.style;
+            let noteInfo = {
+                ...annotation,
+            };
+            if(style in mergedNotes) {
+                mergedNotes[style].push(noteInfo);
+            } else {
+                mergedNotes[style] = [noteInfo];
+            }
+        }
+        let res = [];
+        for(const style of [AnnotationStyle.normal, AnnotationStyle.dashline, AnnotationStyle.underline]) {
+            const annotations = mergedNotes[style];
+            if(annotations != null) {
+                res.push(annotations);
+            }
+        }
+        return res;
+    }
+
+    _prefix_format(bookTitle: string): string {
+        let prefixFormat = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        prefixFormat += `## 圖書網頁\n- [${this.book.title}](${this.book.url})\n\n`;
+
+        return prefixFormat;
+    }
+
     _default_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
-        let markdown = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        let markdown = this._prefix_format(bookTitle);
+
         for(const annotations of mergedAnnotations) {
             const chaptertitle = annotations[0].chapterTitle;
             markdown += `## ${chaptertitle}\n`;
@@ -81,7 +113,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     }
 
     _hqa_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
-        let markdown = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        let markdown = this._prefix_format(bookTitle);
 
         let i = 1;
         let quotes: Array<Annotation> = [];
@@ -106,8 +138,6 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                         if(annotation.notes != null) {
                             const q = annotation.notes.replace('\n', '');
                             markdown += `### ${q}\n`
-                        } else {
-                            markdown += `### Q${i}\n`;
                         }
                         markdown += `A:\n\n`;
                         markdown += `> ${annotation.text}\n`
@@ -135,7 +165,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     }
 
     _hyread_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
-        let markdown = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        let markdown = this._prefix_format(bookTitle);
 
         for(const annotations of mergedAnnotations) {
             const chapterTitle = annotations[0].chapterTitle;
@@ -154,7 +184,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     }
 
     _color_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
-        let markdown = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        let markdown = this._prefix_format(bookTitle);
 
         for(const annotations of mergedAnnotations) {
             const color = annotations[0].color;
@@ -186,10 +216,45 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         return markdown;
     }
 
+    _style_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
+        let markdown = this._prefix_format(bookTitle);
+
+        for(const annotations of mergedAnnotations) {
+            const style = annotations[0].style;
+            let styleTitle = '';
+            switch(style) {
+                case AnnotationStyle.normal:
+                    styleTitle = this.settings.fileExport?.styleMap?.normal || '';
+                    break;
+                case AnnotationStyle.dashline:
+                    styleTitle = this.settings.fileExport?.styleMap?.dashline || '';
+                    break;
+                case AnnotationStyle.underline:
+                    styleTitle = this.settings.fileExport?.styleMap?.underline || '';
+                    break;
+            }
+            markdown += `## ${styleTitle}\n`;
+            for(let annotation of annotations.reverse()) {
+                if(annotation.notes != null) {
+                    markdown += `### ${annotation.notes}\n`
+                }
+                markdown += `> ${annotation.text}\n`
+                // markdown += '\n---\n';
+                markdown += '\n';
+            }
+            markdown += '\n';
+        }
+
+        return markdown;
+    }
+
     toString(): string {
-        let mergedAnnotations = [];
-        if(this.settings.fileExport?.format === FormatType.color) {
+        let mergedAnnotations: any[] = [];
+        let format = this.settings.fileExport?.format;
+        if(format === FormatType.color) {
             mergedAnnotations = this._mergeAnnotationByColor(this.annotations);
+        } else if(format === FormatType.style) {
+            mergedAnnotations = this._mergeAnnotationByStyle(this.annotations);
         } else {
             mergedAnnotations = this._mergeAnnotationByChapter(this.annotations);
         }
@@ -209,6 +274,9 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 break;
             case FormatType.color:
                 formatter = this._color_format.bind(this);
+                break;
+            case FormatType.style:
+                formatter = this._style_format.bind(this);
                 break;
         }
         const markdown = formatter(bookTitle, mergedAnnotations);

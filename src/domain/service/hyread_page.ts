@@ -37,12 +37,21 @@ export class HyReadPageService implements HyReadPage {
         }
 
         console.log($toolbarblock);
-        let href = $toolbarblock.find('.toolbar:first-child a').attr('href');
-        console.log(`href=${href}`);
-        let book = this._parseOnlineReadingUrl(href?? '');
-        // add more info for the book
-        book.title = title;
-        book.cover = cover;
+        // let href = $toolbarblock.find('.toolbar:first-child a').attr('href');
+        let coverUrl = $($inforList.find('.cover a')[0]).attr('href') ?? '';
+        let bookUrl = '';
+        if(coverUrl) {
+            bookUrl = `${window.location.origin}${coverUrl}`;
+        }
+        // console.log(`href=${href}`);
+        // let book = this._parseOnlineReadingUrl(href?? '');
+        let searchParams = new URL(coverUrl, window.location.origin).searchParams;
+        let book: Book = {
+            brn: searchParams.get('id'),
+            url: bookUrl,
+            title: title,
+            cover: cover,
+        }
         console.log(book);
 
         return book;

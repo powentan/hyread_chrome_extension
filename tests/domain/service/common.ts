@@ -1,28 +1,7 @@
-import { ExtensionSettings } from '@/domain/model/settings';
-import { ExportingType } from '@/domain/repo/exporting';
-import { FormatType } from '@/domain/repo/exporting';
 import { Book } from '@/domain/model/book';
+import { defaultExtensionSettings } from '@/domain/model/settings';
 
-export const settings: ExtensionSettings = {
-    exportDefault: ExportingType.File,
-    annotation: {
-        titlePrefix: '',
-    },
-    readwise: {
-        accessToken: '',
-    },
-    fileExport: {
-        folder: '',
-        format: FormatType.default,
-        colorMap: {
-            color1: '',
-            color2: '',
-            color3: '',
-        }
-    },
-    version: '',
-};
-
+export const settings = defaultExtensionSettings;
 export const book: Book = {
     assetUUID: 'asset_uuid',
     brn: 'brn',

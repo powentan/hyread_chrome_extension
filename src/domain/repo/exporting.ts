@@ -10,6 +10,7 @@ export enum FormatType {
     hyRead = 'hyread',
     hqa = 'hq&a',
     color = 'annotation-color',
+    style = 'annotation-style',
 }
 
 export interface ExportingPort {

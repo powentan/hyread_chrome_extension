@@ -15,10 +15,17 @@ type AnnotationColor = {
     color3: string;
 };
 
+type AnnotationStyleMap = {
+    normal: string;
+    dashline: string;
+    underline: string;
+};
+
 type FileExportSettings = {
     folder: string;
     format: FormatType;
     colorMap: AnnotationColor;
+    styleMap: AnnotationStyleMap;
 };
 
 type ExtensionSettings = {
@@ -42,6 +49,11 @@ const defaultExtensionSettings = {
             color2: '問題',
             color3: '引用',
         },
+        styleMap: {
+            normal: '重點',
+            dashline: '最重要',
+            underline: '關鍵字句',
+        },
     },
     annotation: {
         titlePrefix: ''
@@ -49,4 +61,4 @@ const defaultExtensionSettings = {
     version: '',
 };
 
-export { ReadWiseSettings, AnnotationSettings, ExtensionSettings, defaultExtensionSettings, AnnotationColor };
+export { ReadWiseSettings, AnnotationSettings, ExtensionSettings, defaultExtensionSettings, AnnotationColor, AnnotationStyleMap };

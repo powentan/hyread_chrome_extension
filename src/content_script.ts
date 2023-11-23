@@ -29,27 +29,24 @@ function injectBookcaseAndHistory(idNo: string) {
     const hyreadPageService = new HyReadPageService(idNo);
 
     $.each($('.infor-list .toolbarblock .toolbar:last-child'), (index, elem) => {
-        const firstItemText = $($('.infor-list .toolbarblock .toolbar:first-child')[index]).text().trim();
-        if(firstItemText === '線上閱讀') {
-            const $exportButton = $(exportAnnotationButton).clone();
-            $(elem).after($exportButton);
-            $(elem).next().on('click', async e => {
-                $(e.target).addClass('disabled');
-                // toolbarblock
-                let $toolbarblock = $(e.currentTarget).parent();
-                let $inforList = $toolbarblock.parent();
-                const book = hyreadPageService.getBookInfo($inforList);
+        const $exportButton = $(exportAnnotationButton).clone();
+        $(elem).after($exportButton);
+        $(elem).next().on('click', async e => {
+            $(e.target).addClass('disabled');
+            // toolbarblock
+            let $toolbarblock = $(e.currentTarget).parent();
+            let $inforList = $toolbarblock.parent();
+            const book = hyreadPageService.getBookInfo($inforList);
 
-                webMessaingService.onMessageFromBackground((request) => {
-                    const { isOk } = request;
-                    $(e.target).removeClass('disabled');
-                });
-                await webMessaingService.sendToBackground(BackgroundCommand.exporting, {
-                    idNo,
-                    book,
-                });
+            webMessaingService.onMessageFromBackground((request) => {
+                const { isOk } = request;
+                $(e.target).removeClass('disabled');
             });
-        }
+            await webMessaingService.sendToBackground(BackgroundCommand.exporting, {
+                idNo,
+                book,
+            });
+        });
     });
 
 

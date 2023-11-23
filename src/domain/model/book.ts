@@ -1,5 +1,6 @@
 type Book = {
     brn: string | null;
+    url?: string | null;
     assetUUID?: string | null;
     ownerCode?: string | null;
     title?: string | null;
