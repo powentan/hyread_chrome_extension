@@ -16,10 +16,26 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         this.settings = settings;
     }
 
+    _sortMergedNotes(mergedNotes: Record<string, Array<Annotation>>): Array<Array<Annotation>> {
+        return Object.values(mergedNotes).sort(
+            (a: Array<Annotation>, b: Array<Annotation>) => {
+               return a[0].spineIndex - b[0].spineIndex;
+            }
+        );
+    }
+
+    _sortAnnotations(annotations: Array<Annotation>): Array<Annotation> {
+        return annotations.sort(
+            (a: Annotation, b: Annotation) => {
+               return a.spineIndex - b.spineIndex;
+            }
+        );
+    }
+
     _mergeAnnotationByChapter(annotations: Array<Annotation>): Array<Array<Annotation>> {
         let mergedNotes: Record<string, Array<Annotation>> = {};
 
-        for(let annotation of annotations) {
+        for(let annotation of annotations.reverse()) {
             let title = annotation.chapterTitle.replace(/\n/g, '');
             let noteInfo = {
                 ...annotation,
@@ -31,17 +47,13 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 mergedNotes[title] = [noteInfo];
             }
         }
-        return Object.values(mergedNotes).sort(
-            (a: Array<Annotation>, b: Array<Annotation>) => {
-               return a[0].spineIndex - b[0].spineIndex;
-            }
-        );
+        return this._sortMergedNotes(mergedNotes);
     }
 
     _mergeAnnotationByColor(annotations: Array<Annotation>): Array<Array<Annotation>> {
         let mergedNotes: Record<string, Array<Annotation>> = {};
 
-        for(let annotation of annotations) {
+        for(let annotation of annotations.reverse()) {
             let color = annotation.color;
             let noteInfo = {
                 ...annotation,
@@ -54,8 +66,8 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         }
         let res = [];
         for(const color of [AnnotationColor.color1, AnnotationColor.color2, AnnotationColor.color3]) {
-            const annotations = mergedNotes[color];
-            if(annotations != null) {
+            if(mergedNotes[color] != null) {
+                const annotations = this._sortAnnotations(mergedNotes[color]);
                 res.push(annotations);
             }
         }
@@ -65,7 +77,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     _mergeAnnotationByStyle(annotations: Array<Annotation>): Array<Array<Annotation>> {
         let mergedNotes: Record<string, Array<Annotation>> = {};
 
-        for(let annotation of annotations) {
+        for(let annotation of annotations.reverse()) {
             let style = annotation.style;
             let noteInfo = {
                 ...annotation,
@@ -78,8 +90,9 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         }
         let res = [];
         for(const style of [AnnotationStyle.normal, AnnotationStyle.dashline, AnnotationStyle.underline]) {
-            const annotations = mergedNotes[style];
-            if(annotations != null) {
+
+            if(mergedNotes[style] != null) {
+                const annotations = this._sortAnnotations(mergedNotes[style]);
                 res.push(annotations);
             }
         }
@@ -93,17 +106,40 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         return prefixFormat;
     }
 
+    _removeNewLineToSpace(notes: string): string {
+        const _notes = notes.replace(/\n/g, ' ');
+        return _notes;
+    }
+
+    _annotationToMarkdown(annotation: Annotation, withHeadingNote: boolean = false, withChapter: boolean = false): string {
+        let markdown = '';
+        if(withHeadingNote) {
+            if(annotation.notes != null) {
+                markdown += `### ${this._removeNewLineToSpace(annotation.notes)}\n`;
+            }
+        }
+        if(withChapter) {
+            markdown += `> ${annotation.text} -- ${annotation.chapterTitle}\n`;
+        } else {
+            markdown += `> ${annotation.text}\n`;
+        }
+        if(!withHeadingNote) {
+            if(annotation.notes != null) {
+                markdown += `筆記：${annotation.notes}\n`;
+            }
+        }
+
+        return markdown;
+    }
+
     _default_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
         let markdown = this._prefix_format(bookTitle);
 
         for(const annotations of mergedAnnotations) {
             const chaptertitle = annotations[0].chapterTitle;
             markdown += `## ${chaptertitle}\n`;
-            for(let annotation of annotations.reverse()) {
-                markdown += `> ${annotation.text}\n`
-                if(annotation.notes != null) {
-                    markdown += `${annotation.notes}\n`
-                }
+            for(let annotation of annotations) {
+                markdown += this._annotationToMarkdown(annotation);
                 markdown += '\n';
             }
             markdown += '\n';
@@ -115,12 +151,11 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     _hqa_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
         let markdown = this._prefix_format(bookTitle);
 
-        let i = 1;
         let quotes: Array<Annotation> = [];
         for(const annotations of mergedAnnotations) {
             const chaptertitle = annotations[0].chapterTitle;
             markdown += `## ${chaptertitle}\n`;
-            for(let annotation of annotations.reverse()) {
+            for(let annotation of annotations) {
                 if(annotation.style === AnnotationStyle.underline) {
                     quotes.push(annotation);
                     continue;
@@ -128,7 +163,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 // question
                 switch(annotation.style) {
                     case AnnotationStyle.dashline:
-                        markdown += `### ${annotation.text}\n`;
+                        markdown += `### ${this._removeNewLineToSpace(annotation.text)}\n`;
                         markdown += `A:\n\n`;
                         if(annotation.notes != null) {
                             markdown += `${annotation.notes}\n`
@@ -136,8 +171,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                         break;
                     case AnnotationStyle.normal:
                         if(annotation.notes != null) {
-                            const q = annotation.notes.replace('\n', '');
-                            markdown += `### ${q}\n`
+                            markdown += `### ${this._removeNewLineToSpace(annotation.notes)}\n`
                         }
                         markdown += `A:\n\n`;
                         markdown += `> ${annotation.text}\n`
@@ -145,7 +179,6 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 }
                 // highlight
                 markdown += '\n---\n';
-                i++;
             }
             markdown += '\n';
         }
@@ -170,11 +203,8 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         for(const annotations of mergedAnnotations) {
             const chapterTitle = annotations[0].chapterTitle;
             markdown += `## ${chapterTitle}\n`;
-            for(let annotation of annotations.reverse()) {
-                markdown += `${annotation.text}\n`
-                if(annotation.notes != null) {
-                    markdown += `心得筆記: ${annotation.notes}\n`
-                }
+            for(let annotation of annotations) {
+                markdown += this._annotationToMarkdown(annotation);
                 markdown += '\n---\n';
             }
             markdown += '\n';
@@ -203,11 +233,8 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
             const fontColor = getAnnotationFontColor(color as AnnotationColor);
             // markdown += `## <font color="${fontColor}">${colorTitle}</font>\n`;
             markdown += `## ${colorTitle}\n`;
-            for(let annotation of annotations.reverse()) {
-                markdown += `${annotation.text}\n`
-                if(annotation.notes != null) {
-                    markdown += `心得筆記: ${annotation.notes}\n`
-                }
+            for(let annotation of annotations) {
+                markdown += this._annotationToMarkdown(annotation, true, true);
                 markdown += '\n---\n';
             }
             markdown += '\n';
@@ -222,24 +249,23 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         for(const annotations of mergedAnnotations) {
             const style = annotations[0].style;
             let styleTitle = '';
+            let withHeading = true;
             switch(style) {
                 case AnnotationStyle.normal:
                     styleTitle = this.settings.fileExport?.styleMap?.normal || '';
                     break;
                 case AnnotationStyle.dashline:
                     styleTitle = this.settings.fileExport?.styleMap?.dashline || '';
+                    withHeading = false;
                     break;
                 case AnnotationStyle.underline:
                     styleTitle = this.settings.fileExport?.styleMap?.underline || '';
+                    withHeading = false;
                     break;
             }
             markdown += `## ${styleTitle}\n`;
-            for(let annotation of annotations.reverse()) {
-                if(annotation.notes != null) {
-                    markdown += `### ${annotation.notes}\n`
-                }
-                markdown += `> ${annotation.text}\n`
-                // markdown += '\n---\n';
+            for(let annotation of annotations) {
+                markdown += this._annotationToMarkdown(annotation, withHeading, true);
                 markdown += '\n';
             }
             markdown += '\n';
