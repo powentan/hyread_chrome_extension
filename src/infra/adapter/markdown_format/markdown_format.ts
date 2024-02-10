@@ -111,11 +111,11 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
         return _notes;
     }
 
-    _annotationToMarkdown(annotation: Annotation, withHeadingNote: boolean = false, withChapter: boolean = false): string {
+    _annotationToMarkdown(annotation: Annotation, withHeadingNote: boolean = false, withChapter: boolean = false, headingString: string = '###'): string {
         let markdown = '';
         if(withHeadingNote) {
             if(annotation.notes != null) {
-                markdown += `### ${this._removeNewLineToSpace(annotation.notes)}\n`;
+                markdown += `${headingString} ${this._removeNewLineToSpace(annotation.notes)}\n`;
             }
         }
         if(withChapter) {
@@ -245,7 +245,6 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
 
     _style_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
         let markdown = this._prefix_format(bookTitle);
-
         for(const annotations of mergedAnnotations) {
             const style = annotations[0].style;
             let styleTitle = '';
@@ -269,6 +268,57 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 markdown += '\n';
             }
             markdown += '\n';
+        }
+
+        return markdown;
+    }
+
+    _sumamry_format(bookTitle: string, mergedAnnotations: Array<Array<Annotation>>): string {
+        let markdown = this._prefix_format(bookTitle);
+
+        for(const annotations of mergedAnnotations) {
+            let chapterBody = '';
+            const chaptertitle = annotations[0].chapterTitle;
+            let normalNotes = [];
+            let dashlineNotes = [];
+            let underlineNotes = [];
+            for(let annotation of annotations) {
+                const style = annotations[0].style;
+                switch(style) {
+                    case AnnotationStyle.normal:
+                        normalNotes.push(annotation);
+                        break;
+                    case AnnotationStyle.dashline:
+                        dashlineNotes.push(annotation);
+                        break;
+                    case AnnotationStyle.underline:
+                        underlineNotes.push(annotation);
+                        break;
+                }
+            }
+            chapterBody += `## ${chaptertitle}\n\n`;
+            if(underlineNotes.length !== 0) {
+                chapterBody += `### 章節重點\n`;
+                for(const note of underlineNotes) {
+                    chapterBody += this._annotationToMarkdown(note, true, false, '####');
+                    chapterBody += '\n';
+                }
+            }
+            if(normalNotes.length !== 0) {
+                chapterBody += `### 畫線\n`;
+                for(const note of normalNotes) {
+                    chapterBody += this._annotationToMarkdown(note, true, false, '####');
+                    chapterBody += '\n';
+                }
+            }
+            if(dashlineNotes.length !== 0) {
+                chapterBody += `### 疑問\n`;
+                for(const note of dashlineNotes) {
+                    chapterBody += this._annotationToMarkdown(note, true, false, '####');
+                    chapterBody += '\n';
+                }
+            }
+            markdown += (chapterBody + '\n');
         }
 
         return markdown;
@@ -303,6 +353,9 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                 break;
             case FormatType.style:
                 formatter = this._style_format.bind(this);
+                break;
+            case FormatType.summary:
+                formatter = this._sumamry_format.bind(this);
                 break;
         }
         const markdown = formatter(bookTitle, mergedAnnotations);

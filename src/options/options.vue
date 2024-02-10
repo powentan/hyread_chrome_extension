@@ -76,6 +76,7 @@
             </el-row>
           </template>
 
+
         </el-tab-pane>
 
         <!-- <el-tab-pane label="匯出格式" name="export_format">
@@ -141,6 +142,10 @@ const fileExportFormats = [
       label: '定義畫線風格',
       value: FormatType.style,
     },
+    {
+      label: '章節重點',
+      value: FormatType.summary,
+    }
 ];
 const annotationColors = [
     {

@@ -11,6 +11,7 @@ export enum FormatType {
     hqa = 'hq&a',
     color = 'annotation-color',
     style = 'annotation-style',
+    summary = 'summary',
 }
 
 export interface ExportingPort {
