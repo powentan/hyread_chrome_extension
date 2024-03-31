@@ -101,8 +101,10 @@ function injectOnlineReading() {
                 $menu.trigger('click');
                 const $infoTab = $('[class^="TabBar__TabBarItem"]:last-child');
                 $infoTab.trigger('click');
-                const cover = $("[class^='InformationPanel__InformationCover']").attr('src');
-                const title = $("[class^='InformationPanel__InformationTitle']").text();
+                const $infoTab2 = $('.sc-1yt5cz8-0:last-child')
+                $infoTab2.trigger('click');
+                const cover = $("[class^='InformationPanel__InformationCover']").attr('src') || $(".sc-1nomm8r-1 div").attr('src');
+                const title = $("[class^='InformationPanel__InformationTitle']").text() || $(".sc-1nomm8r-4").text();
                 // hide menu
                 $menu.trigger('click');
 

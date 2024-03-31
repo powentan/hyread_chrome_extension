@@ -6,11 +6,16 @@
 ## How to Build the Extension
 ```shell
 # install packages
-make setup
-# build the content-script bundle
-make build
+npm run setup
+
+# build extension
+npm run build
+
+# clean
+npm run clean
+
 # package the chrome extension
-make package
+npm run package
 ```
 
 ## TODO
