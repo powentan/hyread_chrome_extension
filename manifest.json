@@ -1,7 +1,7 @@
 {
     "name": "HyRead圖書館註記匯出",
     "description": "在HyRead圖書館服務的裡面增加註記匯出功能",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "manifest_version": 3,
     "options_ui": {
         "page": "dist/options/options_vue.html",
