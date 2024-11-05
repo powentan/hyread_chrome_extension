@@ -101,7 +101,11 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
 
     _prefix_format(bookTitle: string): string {
         let prefixFormat = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
-        prefixFormat += `## 圖書網頁\n- [${this.book.title}](${this.book.url})\n\n`;
+        if(this.book.url != null && this.book.title != null) {
+            prefixFormat += `## 圖書網頁\n- [${this.book.title}](${this.book.url})\n\n`;
+        } else {
+            prefixFormat += "\n\n";
+        }
 
         return prefixFormat;
     }
