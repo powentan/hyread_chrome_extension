@@ -100,7 +100,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
     }
 
     _prefix_format(bookTitle: string): string {
-        let prefixFormat = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n`;
+        let prefixFormat = `# ${bookTitle}\n![${this.book.title}](${this.book.cover})\n\n`;
         if(this.book.url != null && this.book.title != null) {
             prefixFormat += `## 圖書網頁\n- [${this.book.title}](${this.book.url})\n\n`;
         } else {
@@ -182,7 +182,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
                         break;
                 }
                 // highlight
-                markdown += '\n---\n';
+                markdown += '\n---\n\n';
             }
             markdown += '\n';
         }
@@ -209,7 +209,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
             markdown += `## ${chapterTitle}\n`;
             for(let annotation of annotations) {
                 markdown += this._annotationToMarkdown(annotation);
-                markdown += '\n---\n';
+                markdown += '\n---\n\n';
             }
             markdown += '\n';
         }
@@ -239,7 +239,7 @@ export default class MarkdownFormatAdapter implements AnnotationFormatPort
             markdown += `## ${colorTitle}\n`;
             for(let annotation of annotations) {
                 markdown += this._annotationToMarkdown(annotation, true, true);
-                markdown += '\n---\n';
+                markdown += '\n---\n\n';
             }
             markdown += '\n';
         }
